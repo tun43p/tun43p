@@ -1,4 +1,4 @@
-# GM! 👋
+# Hello! 👋
 
 [![tun43p's GitHub Stats](https://github-readme-stats.vercel.app/api?username=tun43p&show_icons=true&count_private=true)](https://github.com/tun43p)
 
