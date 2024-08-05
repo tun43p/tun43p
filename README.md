@@ -1,6 +1,7 @@
 # Hi there 👋
 
 - 📱 I'm currently working almost full-time on Flutter
+- 👾 And the rest of my time on Web3 apps
 
 ## My Stats
 
