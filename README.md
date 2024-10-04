@@ -1,17 +1,12 @@
 # Hi there 👋
 
-- 📱 I'm currently working almost full-time on Flutter
-- 👾 And the rest of my time on Web3 apps
+I'm Alex, mainly a mobile developer but full-stack and pentester in my spare time.
 
-## My Stats
+I like to tinker with a lot of things, especially when it comes to music or design.
 
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=tun43p&show_icons=true&theme=default)
-![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=tun43p&theme=default)
+Feel free to have a look at my repositories, there might be something you like.
 
-## My Top Languages
+## How to reach me 📫
 
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=tun43p&layout=compact&theme=default)
-
-## My Trophies
-
-![Trophies](https://github-profile-trophy.vercel.app/?username=tun43p&theme=default)
+- [Mail](mailto:tech@tun43p.com)
+- [Linktree](https://linktr.ee/tun43p)
