@@ -1,12 +1,12 @@
 # Hi there 👋
 
-I'm mainly a web3 and full-stack dev but also pentester in my spare time 🕵️.
+I'm mainly a web3 and full-stack dev but also pentester in my spare time. When I dev web or mobile apps, I like to use Flutter or Astro. Otherwise, I do the rest of my projects in Go. You'll see some Python code in my repos but it's mainly for prototyping, and they are often rewritten in Go afterwards 😬.
 
-I like to tinker with a lot of things, especially when it comes to music or
-design 🎛️.
+I also like to tinker with a lot of things, especially when it comes to music or
+design 🎹.
 
 Most of my repos are private, but feel free to have a look at my public repositories,
-there might be something you like 🤷.
+there might be something you like 👀.
 
 ## Some cool stuff I've worked on 🚀
 
