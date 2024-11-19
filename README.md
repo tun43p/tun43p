@@ -1,6 +1,6 @@
 # Hi there 👋
 
-I'm Alex, mainly a web3 and full-stack dev but pentester in my spare time 🕵️.
+I'm Alex, mainly a web3 and full-stack dev but also pentester in my spare time 🕵️.
 
 I like to tinker with a lot of things, especially when it comes to music or
 design 🎛️.
