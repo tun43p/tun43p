@@ -32,3 +32,7 @@ a:hover {
   text-decoration: underline;
   cursor: url(/pointer-cursor.gif), auto !important;
 }
+
+ul {
+  list-style-type: lower-latin;
+}

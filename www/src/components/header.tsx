@@ -2,7 +2,7 @@ import { useLocation } from "@solidjs/router";
 import { JSX } from "solid-js";
 import LinkComponent from "./link";
 
-export default function NavigationComponent(): JSX.Element {
+export default function HeaderComponent(): JSX.Element {
   const location = useLocation();
 
   const active = (path: string): string =>
@@ -10,7 +10,7 @@ export default function NavigationComponent(): JSX.Element {
 
   return (
     <nav class="py-4">
-      <ul class="flex items-center justify-end gap-4">
+      <ul class="flex items-center justify-end gap-4 list-none!">
         <li class={`${active("/")}`}>
           <LinkComponent type="internal" href="/">
             home
