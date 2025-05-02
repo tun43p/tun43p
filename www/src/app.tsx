@@ -10,7 +10,7 @@ export default function App(): JSX.Element {
     <MetaProvider>
       <Router
         root={(props) => (
-          <div class="w-2xl mx-auto">
+          <div class="w-2xl mx-auto h-screen">
             <Navigation />
             <Suspense>{props.children}</Suspense>
           </div>

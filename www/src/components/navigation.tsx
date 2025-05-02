@@ -9,7 +9,7 @@ export default function NavigationComponent(): JSX.Element {
     path === location.pathname ? "opacity-100" : "opacity-50 hover:opacity-100";
 
   return (
-    <nav class="my-4">
+    <nav class="py-4">
       <ul class="flex items-center justify-end gap-4">
         <li class={`${active("/")}`}>
           <LinkComponent type="internal" href="/">

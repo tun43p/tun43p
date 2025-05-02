@@ -13,6 +13,10 @@
   }
 }
 
+* {
+  cursor: url(/default-cursor.gif), auto !important;
+}
+
 body {
   background: rgb(var(--background-rgb));
   color: rgb(var(--foreground-rgb));
@@ -26,4 +30,5 @@ a {
 
 a:hover {
   text-decoration: underline;
+  cursor: url(/pointer-cursor.gif), auto !important;
 }
