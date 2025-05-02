@@ -13,7 +13,7 @@ export default function HomeRoute(): JSX.Element {
       <TitleComponent type="h1">hi, i'm tun43p</TitleComponent>
       <div class="flex flex-col gap-2 mb-6">
         {[
-          "I'm a full-stack developer passionate about building innovative and intuitive applications. Skilled in Go, Python, Flutter, Dart, and advanced JavaScript/TypeScript, I create custom solutions like trading bots and blockchain apps.",
+          "I'm a full-stack developer passionate about building innovative and intuitive applications. Skilled in Go, Python, Flutter, Dart, and advanced JavaScript/TypeScript, I create custom solutions like trading bots, blockchain apps, custom ai agents, and more.",
           "I also handle design and UX/UI for most of my projects, believing that user experience is key to any successful application.",
           "I enjoy working on every stage of a project, from design to production, and I'm always looking to improve my skills. I'm a big fan of open source and eager to contribute more to the community.",
           "Outside of development, I enjoy sports, nature, and have been a musician for over 10 years—these keep me creative and balanced.",
