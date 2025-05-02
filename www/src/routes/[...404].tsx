@@ -1,31 +1,21 @@
-import { A } from "@solidjs/router";
 import { JSX } from "solid-js";
+import { Title } from "@solidjs/meta";
 
-export default function NotFound(): JSX.Element {
+import TitleComponent from "~/components/title";
+import LinkComponent from "~/components/link";
+
+export default function NotFoundRoute(): JSX.Element {
   return (
-    <main class="text-center mx-auto text-gray-700 p-4">
-      <h1 class="max-6-xs text-6xl text-sky-700 font-thin uppercase my-16">
-        Not Found
-      </h1>
-      <p class="mt-8">
-        Visit{" "}
-        <a
-          href="https://solidjs.com"
-          target="_blank"
-          class="text-sky-600 hover:underline"
-        >
-          solidjs.com
-        </a>{" "}
-        to learn how to build Solid apps.
-      </p>
-      <p class="my-4">
-        <A href="/" class="text-sky-600 hover:underline">
-          Home
-        </A>
-        {" - "}
-        <A href="/about" class="text-sky-600 hover:underline">
-          About Page
-        </A>
+    <main>
+      <Title>page not found - tun43p</Title>
+      <TitleComponent type="h1">oups... page not found</TitleComponent>
+      <p>
+        the page you are looking for does not exist or has been moved. you can
+        go back to the{" "}
+        <LinkComponent type="internal" href="/">
+          home
+        </LinkComponent>{" "}
+        or try to search for what you are looking for.
       </p>
     </main>
   );
