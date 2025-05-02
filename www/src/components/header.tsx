@@ -8,19 +8,31 @@ export default function HeaderComponent(): JSX.Element {
   const active = (path: string): string =>
     path === location.pathname ? "opacity-100" : "opacity-50 hover:opacity-100";
 
+  const links = [
+    {
+      name: "home",
+      href: "/",
+    },
+    {
+      name: "blog",
+      href: "/blog",
+    },
+    {
+      name: "contact",
+      href: "/contact",
+    },
+  ];
+
   return (
     <nav class="py-4">
       <ul class="flex items-center justify-end gap-4 list-none!">
-        <li class={`${active("/")}`}>
-          <LinkComponent type="internal" href="/">
-            home
-          </LinkComponent>
-        </li>
-        <li class={`${active("/contact")}`}>
-          <LinkComponent type="internal" href="/contact">
-            contact
-          </LinkComponent>
-        </li>
+        {links.map((link) => (
+          <li class={`${active(link.href)}`}>
+            <LinkComponent type="internal" href={link.href}>
+              {link.name}
+            </LinkComponent>
+          </li>
+        ))}
       </ul>
     </nav>
   );
