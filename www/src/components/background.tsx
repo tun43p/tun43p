@@ -1,12 +1,6 @@
 import { JSX, onMount, createSignal } from "solid-js";
 
-type Props = {
-  redFilter?: boolean;
-};
-
-export default function BackgroundComponent({
-  redFilter = false,
-}: Props): JSX.Element {
+export default function BackgroundComponent(): JSX.Element {
   let videoRef: HTMLVideoElement | undefined;
 
   const sourceVideoUrl = "https://www.youtube.com/watch?v=tZm1yYA-PNo";
@@ -18,9 +12,7 @@ export default function BackgroundComponent({
     videoRef?.play();
   });
 
-  return redFilter ? (
-    <div class="absolute top-0 left-0 w-full h-full z-[-1] bg-red-500 opacity-50" />
-  ) : (
+  return (
     <>
       <video
         ref={videoRef}
