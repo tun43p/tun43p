@@ -1,16 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background-rgb: 255, 255, 255;
-  --foreground-rgb: 0, 0, 0;
   --primary-rgb: 67, 227, 179;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-rgb: 0, 0, 0;
-    --foreground-rgb: 255, 255, 255;
-  }
 }
 
 * {
@@ -18,8 +9,8 @@
 }
 
 body {
-  background: rgb(var(--background-rgb));
-  color: rgb(var(--foreground-rgb));
+  background: black;
+  color: white;
   font-family: "Menlo", monospace;
   font-size: 14px;
 }
@@ -30,6 +21,15 @@ a {
 
 a:hover {
   text-decoration: underline;
+  cursor: url(/pointer-cursor.gif), auto !important;
+}
+
+button {
+  opacity: 50%;
+}
+
+button:hover {
+  opacity: 100%;
   cursor: url(/pointer-cursor.gif), auto !important;
 }
 

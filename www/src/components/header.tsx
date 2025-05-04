@@ -14,10 +14,6 @@ export default function HeaderComponent(): JSX.Element {
       href: "/",
     },
     {
-      name: "blog",
-      href: "/blog",
-    },
-    {
       name: "contact",
       href: "/contact",
     },
