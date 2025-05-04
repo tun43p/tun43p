@@ -61,7 +61,7 @@ if status is-interactive
 
     # Set custom directories
     set -gx CODE $DOCUMENTS/Code
-    set -gx DOTFILES $CODE/github.com/tun43p/dotfiles
+    set -gx DOTFILES $CODE/github.com/tun43p/tun43p/dots
 
     # Configure flags 
     set -gx LDFLAGS "-L/opt/local/lib -L$HOMEBREW/opt/zlib/lib -L$HOMEBREW/opt/readline/lib -L$HOMEBREW/opt/openssl/lib -L$ICU4C/lib"
