@@ -1,0 +1,37 @@
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = false
+
+[push]
+	autoSetupRemote = true
+
+[gpg]
+  program = /opt/homebrew/bin/gpg
+
+[commit]
+	gpgSign = true
+
+[tag]
+	gpgSign = true
+
+[user]
+	name = tun43p
+	email = tun43p@icloud.com
+
+[includeIf "gitdir:~/Documents/Code/github.com/"]
+	path = ~/Documents/Code/github.com/tun43p/tun43p/dots/git/conf.d/tun43p
+
+[includeIf "gitdir:~/Documents/Code/gitlab.com/"]
+	path = ~/Documents/Code/github.com/tun43p/tun43p/dots/git/conf.d/tun43p
+
+[includeIf "gitdir:~/Documents/Code/gitlab.innolab.fr/"]
+	path = ~/Documents/Code/github.com/tun43p/tun43p/dots/git/conf.d/bytel
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+

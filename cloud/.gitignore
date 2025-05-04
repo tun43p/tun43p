@@ -1,5 +1,2 @@
-*.env*
-!.env.example
-
 glance.yml
 traefik_dynamic.yml
