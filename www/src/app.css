@@ -15,6 +15,46 @@ body {
   font-size: 14px;
 }
 
+h1 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+h6 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+p {
+  margin-bottom: 1.5rem;
+}
+
 a {
   color: rgb(var(--primary-rgb));
 }
@@ -34,5 +74,8 @@ button:hover {
 }
 
 ul {
+  display: flex;
+  flex-direction: column;
   list-style-type: lower-latin;
+  gap: 0.5rem;
 }

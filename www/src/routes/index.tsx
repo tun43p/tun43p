@@ -1,16 +1,14 @@
 import { JSX } from "solid-js";
-import { Title } from "@solidjs/meta";
 
 import LinkComponent from "~/components/link";
-import TitleComponent from "~/components/title";
+import BaseLayout from "~/layouts/base";
 
 import { GITHUB_PROFILE_URL } from "~/core/constants";
 
 export default function HomeRoute(): JSX.Element {
   return (
-    <main>
-      <Title>welcome - tun43p</Title>
-      <TitleComponent type="h1">hi, i'm tun43p</TitleComponent>
+    <BaseLayout title="home">
+      <h1>hi, i'm tun43p</h1>
       <div class="flex flex-col gap-2 mb-6">
         {[
           "I'm a full-stack developer passionate about building innovative, stylish, and intuitive stuff. I can build anything from a simple website like this one to a complex application like trading bots, blockchain apps, custom ai agents, and more.",
@@ -18,11 +16,11 @@ export default function HomeRoute(): JSX.Element {
           "Outside of development, I enjoy sports, nature, and have been a musician for over 10 years—these keep me creative and balanced.",
           "If you're looking for a passionate, creative, and dedicated full-stack developer, let's connect and build something exceptional together!",
         ].map((text) => (
-          <p>{text.toLowerCase()}</p>
+          <p class="!mb-0">{text.toLowerCase()}</p>
         ))}
       </div>
-      <TitleComponent type="h2">some cool stuff i made</TitleComponent>
-      <p class="mb-6">
+      <h2>some cool stuff i made</h2>
+      <p>
         most of my projects are on{" "}
         <LinkComponent type="external" href={GITHUB_PROFILE_URL}>
           github
@@ -34,7 +32,7 @@ export default function HomeRoute(): JSX.Element {
         </LinkComponent>
         .
       </p>
-      <ul class="flex flex-col gap-2">
+      <ul>
         {[
           {
             name: "tun43p",
@@ -66,6 +64,6 @@ export default function HomeRoute(): JSX.Element {
           </li>
         ))}
       </ul>
-    </main>
+    </BaseLayout>
   );
 }

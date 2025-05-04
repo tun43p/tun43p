@@ -1,8 +1,7 @@
 import { JSX } from "solid-js";
-import { Title } from "@solidjs/meta";
 
 import LinkComponent from "~/components/link";
-import TitleComponent from "~/components/title";
+import BaseLayout from "~/layouts/base";
 
 import {
   EMAIL,
@@ -13,10 +12,9 @@ import {
 
 export default function ContactRoute(): JSX.Element {
   return (
-    <main>
-      <Title>contact - tun43p</Title>
-      <TitleComponent type="h1">want to get in touch?</TitleComponent>
-      <p class="mb-6">
+    <BaseLayout title="contact">
+      <h1>get in touch</h1>
+      <p>
         you can contact me through my{" "}
         <LinkComponent type="external" href={DISCORD_PROFILE_URL}>
           discord
@@ -27,7 +25,7 @@ export default function ContactRoute(): JSX.Element {
         </LinkComponent>
         .
       </p>
-      <ul class="flex flex-col gap-2">
+      <ul>
         <li>
           <LinkComponent type="external" href={`mailto:${EMAIL}`}>
             email
@@ -49,6 +47,6 @@ export default function ContactRoute(): JSX.Element {
           </LinkComponent>
         </li>
       </ul>
-    </main>
+    </BaseLayout>
   );
 }
