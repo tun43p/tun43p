@@ -1,0 +1,182 @@
+services:
+  authentik:
+    image: ghcr.io/goauthentik/server:latest
+    container_name: authentik
+    restart: unless-stopped
+    command: server
+    environment:
+      AUTHENTIK_REDIS__HOST: authentik-redis
+      AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRES_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRES_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_POSTGRES_PASSWORD:-authentik}
+    env_file:
+      - .env
+    labels:
+      - "traefik.enable=true"
+    volumes:
+      - authentik_media_data:/media
+      - authentik_custom_templates_data:/templates
+    depends_on:
+      - authentik-postgres
+      - authentik-redis
+    networks:
+      - cloud
+
+  authentik-worker:
+    image: ghcr.io/goauthentik/server:latest
+    container_name: authentik-worker
+    restart: unless-stopped
+    command: worker
+    env_file:
+      - .env
+    environment:
+      AUTHENTIK_REDIS__HOST: authentik-redis
+      AUTHENTIK_POSTGRESQL__HOST: authentik-postgres
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_POSTGRES_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_POSTGRES_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_POSTGRES_PASSWORD:-authentik}
+    volumes:
+      - authentik_media_data:/media
+      - authentik_custom_templates_data:/templates
+    depends_on:
+      - authentik-postgres
+      - authentik-redis
+    networks:
+      - cloud
+
+  authentik-redis:
+    image: redis:alpine
+    container_name: authentik-redis
+    restart: unless-stopped
+    networks:
+      - cloud
+
+  authentik-postgres:
+    image: postgres:15
+    container_name: authentik-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${AUTHENTIK_POSTGRES_DB:-authentik}
+      POSTGRES_USER: ${AUTHENTIK_POSTGRES_USER:-authentik}
+      POSTGRES_PASSWORD: ${AUTHENTIK_POSTGRES_PASSWORD:-authentik}
+    env_file:
+      - .env
+    volumes:
+      - authentik_postgres_data:/var/lib/postgresql/data
+    networks:
+      - cloud
+
+  glance:
+    image: glanceapp/glance:latest
+    container_name: glance
+    restart: unless-stopped 
+    env_file:
+      - .env
+    labels:
+      - "traefik.enable=true"
+    volumes:
+      - glance_data:/app/data
+      - ./config/glance/glance.yml:/app/config/glance.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - traefik
+    networks:
+      - cloud
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    environment:
+      - GENERIC_TIMEZONE=${TZ:-Europe/Berlin}
+    env_file:
+      - .env
+    labels:
+      - "traefik.enable=true"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      - traefik
+      - socat-proxy
+    networks:
+      - cloud
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: unless-stopped
+    env_file:
+      - .env
+    labels:
+      - "traefik.enable=true"
+    volumes:
+      - open_webui_data:/app/backend/data
+    depends_on:
+      - traefik
+      - socat-proxy
+    networks:
+      - cloud
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
+    env_file:
+      - .env
+    labels:
+      - "traefik.enable=true"
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - traefik
+    networks:
+      - cloud
+
+  socat-proxy:
+    image: alpine/socat
+    container_name: socat-proxy
+    restart: unless-stopped
+    command: 
+      - "TCP-LISTEN:${SOCAT_PORT:-11435},fork,reuseaddr"
+      - "TCP:${SOCAT_FORWARD_HOST:-localhost}:${SOCAT_FORWARD_PORT:-11434}"
+    env_file:
+      - .env
+    networks:
+      - cloud
+
+  traefik:
+    image: traefik:v2.11
+    container_name: traefik
+    restart: unless-stopped
+    command:
+      - --api.insecure=false
+      - --providers.docker=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --providers.file.filename=/etc/traefik/traefik_dynamic.yml
+      - --providers.file.directory=/etc/traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/traefik/traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - cloud
+
+volumes:
+  authentik_custom_templates_data:
+  authentik_media_data:
+  authentik_postgres_data:
+  glance_data:
+  n8n_data:
+  open_webui_data:
+  portainer_data:
+
+networks:
+  cloud:
+    name: cloud
+    external: true
+  

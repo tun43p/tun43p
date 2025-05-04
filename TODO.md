@@ -1,0 +1,3 @@
+- [ ] add theme switch mode
+- [ ] add a first blog article on windsurf
+- [ ] add an other blog article on wow to make a trading bot in python
