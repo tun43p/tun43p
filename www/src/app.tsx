@@ -5,7 +5,8 @@ import { FileRoutes } from "@solidjs/start/router";
 
 import HeaderComponent from "./components/header";
 import FooterComponent from "./components/footer";
-import VideoComponent from "./components/video";
+import BackgroundComponent from "./components/background";
+import LoadingComponent from "./components/loading";
 
 import "./app.css";
 
@@ -13,14 +14,18 @@ export default function App(): JSX.Element {
   return (
     <MetaProvider>
       <Router
-        root={(props) => (
-          <div class="w-2xl mx-auto h-screen">
-            <VideoComponent />
-            <HeaderComponent />
-            <Suspense>{props.children}</Suspense>
-            <FooterComponent />
-          </div>
-        )}
+        root={(props) => {
+          return (
+            <div class="w-2xl mx-auto h-screen">
+              <Suspense fallback={<LoadingComponent />}>
+                <BackgroundComponent />
+                <HeaderComponent />
+                {props.children}
+                <FooterComponent />
+              </Suspense>
+            </div>
+          );
+        }}
       >
         <FileRoutes />
       </Router>

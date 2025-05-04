@@ -1,5 +1,6 @@
 import { useLocation } from "@solidjs/router";
 import { JSX } from "solid-js";
+
 import LinkComponent from "./link";
 
 export default function HeaderComponent(): JSX.Element {
@@ -14,6 +15,10 @@ export default function HeaderComponent(): JSX.Element {
       href: "/",
     },
     {
+      name: "logs",
+      href: "/logs",
+    },
+    {
       name: "contact",
       href: "/contact",
     },
@@ -21,7 +26,7 @@ export default function HeaderComponent(): JSX.Element {
 
   return (
     <nav class="py-4">
-      <ul class="flex items-center justify-end gap-4 list-none!">
+      <ul class="!flex-row items-center justify-end !list-none">
         {links.map((link) => (
           <li class={`${active(link.href)}`}>
             <LinkComponent type="internal" href={link.href}>
