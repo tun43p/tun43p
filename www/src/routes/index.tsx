@@ -6,16 +6,18 @@ import BaseLayout from "~/layouts/base";
 import { GITHUB_PROFILE_URL } from "~/core/constants";
 
 export default function HomeRoute(): JSX.Element {
+  const texts = [
+    "I'm a full-stack developer passionate about building innovative, stylish, and intuitive stuff. I can build anything from a simple website like this one to a complex application like trading bots, blockchain apps, custom ai agents, and more.",
+    "I also handle design and UX/UI for most of my projects, believing that user experience is key to any successful application.",
+    "Outside of development, I enjoy sports, nature, and have been a musician for over 10 years—these keep me creative and balanced.",
+    "If you're looking for a passionate, creative, and dedicated full-stack developer, let's connect and build something exceptional together!",
+  ];
+
   return (
-    <BaseLayout title="home">
+    <BaseLayout title="Home" description={texts.join(" ")}>
       <h1>hi, i'm tun43p</h1>
       <div class="flex flex-col gap-2 mb-6">
-        {[
-          "I'm a full-stack developer passionate about building innovative, stylish, and intuitive stuff. I can build anything from a simple website like this one to a complex application like trading bots, blockchain apps, custom ai agents, and more.",
-          "I also handle design and UX/UI for most of my projects, believing that user experience is key to any successful application.",
-          "Outside of development, I enjoy sports, nature, and have been a musician for over 10 years—these keep me creative and balanced.",
-          "If you're looking for a passionate, creative, and dedicated full-stack developer, let's connect and build something exceptional together!",
-        ].map((text) => (
+        {texts.map((text) => (
           <p class="!mb-0">{text.toLowerCase()}</p>
         ))}
       </div>
@@ -39,6 +41,12 @@ export default function HomeRoute(): JSX.Element {
             description:
               "some of my personal stuff like home server infrastructure and, this website, etc.",
             url: `${GITHUB_PROFILE_URL}/tun43p`,
+          },
+          {
+            name: "golang-crypto-toolbox",
+            description:
+              "a massive crypto toolbox that can be used to trade or do some analysis.",
+            url: `${GITHUB_PROFILE_URL}/golang-crypto-toolbox`,
           },
           {
             name: "python-uniswap-trading-bot",
