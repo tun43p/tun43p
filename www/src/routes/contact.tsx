@@ -12,7 +12,10 @@ import {
 
 export default function ContactRoute(): JSX.Element {
   return (
-    <BaseLayout title="contact">
+    <BaseLayout
+      title="Contact"
+      description={`Get in touch. Email: ${EMAIL}. Discord: ${DISCORD_PROFILE_URL}. X: ${X_PROFILE_URL}. LinkedIn: ${LINKEDIN_PROFILE_URL}.`}
+    >
       <h1>get in touch</h1>
       <p>
         you can contact me through my{" "}
