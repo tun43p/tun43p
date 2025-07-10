@@ -3,14 +3,7 @@ return {
   dependencies = {
     { "williamboman/mason.nvim" },
     { "williamboman/mason-lspconfig.nvim" },
-    { "hrsh7th/nvim-cmp" },
     { "hrsh7th/cmp-nvim-lsp" },
-    { "L3MON4D3/LuaSnip" },
-    { "rafamadriz/friendly-snippets" },
-    { "hrsh7th/cmp-buffer" },
-    { "hrsh7th/cmp-path" },
-    { "hrsh7th/cmp-cmdline" },
-    { "saadparwaiz1/cmp_luasnip" },
   },
   config = function()
     require("mason").setup({})
@@ -71,15 +64,12 @@ return {
       },
     })
 
-    -- Activer les serveurs LSP
     local servers = require("mason-lspconfig").get_installed_servers()
     for _, server in ipairs(servers) do
       vim.lsp.enable(server)
     end
     
-    -- Définir les keybinds globalement pour tous les buffers
     local function setup_global_keymaps()
-      -- Navigation
       vim.keymap.set("n", "gd", function()
         vim.lsp.buf.definition()
       end, { desc = "LSP Goto Definition" })
@@ -96,7 +86,6 @@ return {
         vim.lsp.buf.type_definition()
       end, { desc = "LSP Goto Type Definition" })
       
-      -- Diagnostics
       vim.keymap.set("n", "gl", function()
         vim.diagnostic.open_float()
       end, { desc = "Show Line Diagnostics" })
@@ -109,7 +98,6 @@ return {
         vim.diagnostic.goto_next()
       end, { desc = "Next Diagnostic" })
       
-      -- Actions
       vim.keymap.set("n", "<leader>pa", function()
         vim.lsp.buf.code_action()
       end, { desc = "LSP Code Action" })
@@ -122,7 +110,6 @@ return {
         vim.lsp.buf.format({ async = true })
       end, { desc = "LSP Format" })
       
-      -- Workspace
       vim.keymap.set("n", "<leader>ps", function()
         vim.lsp.buf.workspace_symbol()
       end, { desc = "LSP Workspace Symbol" })
@@ -132,16 +119,14 @@ return {
       end, { desc = "LSP Diagnostics List" })
     end
     
-    -- Configurer les keymaps globaux
     setup_global_keymaps()
 
-    -- Configuration des diagnostics
     vim.diagnostic.config({
-      virtual_text = true,      -- Afficher le texte virtuel à côté des lignes avec des diagnostics
-      signs = true,             -- Afficher les signes dans la colonne des signes
-      underline = true,         -- Souligner le texte avec des diagnostics
-      update_in_insert = false, -- Ne pas mettre à jour les diagnostics en mode insertion
-      severity_sort = true,     -- Trier les diagnostics par sévérité
+      virtual_text = true,
+      signs = true,
+      underline = true,
+      update_in_insert = false,
+      severity_sort = true,
       float = {
         focusable = true,
         style = "minimal",
@@ -152,13 +137,11 @@ return {
       },
     })
 
-    -- Configuration des keymaps LSP spécifiques aux buffers
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspConfig', {}),
       callback = function(ev)
         local opts = { buffer = ev.buf, remap = false }
         
-        -- Information et documentation spécifiques au buffer
         vim.keymap.set("n", "K", function()
           vim.lsp.buf.hover()
         end, vim.tbl_deep_extend("force", opts, { desc = "LSP Hover Documentation" }))
@@ -169,72 +152,6 @@ return {
       end,
     })
 
-    -- Configuration de nvim-cmp
-    local cmp = require("cmp")
-    local cmp_select = { behavior = cmp.SelectBehavior.Select }
-
-    require("luasnip.loaders.from_vscode").lazy_load()
-
-    -- `/` cmdline setup.
-    cmp.setup.cmdline("/", {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = {
-        { name = "buffer" },
-      },
-    })
-
-    -- `:` cmdline setup.
-    cmp.setup.cmdline(":", {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = cmp.config.sources({
-        { name = "path" },
-      }, {
-        {
-          name = "cmdline",
-          option = {
-            ignore_cmds = { "Man", "!" },
-          },
-        },
-      }),
-    })
-
-    cmp.setup({
-      snippet = {
-        expand = function(args)
-          require("luasnip").lsp_expand(args.body)
-        end,
-      },
-      sources = {
-        { name = "codeium" },
-        { name = "nvim_lsp" },
-        { name = "luasnip", keyword_length = 2 },
-        { name = "buffer",  keyword_length = 3 },
-        { name = "path" },
-      },
-      mapping = cmp.mapping.preset.insert({
-        ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-        ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-        ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        ["<C-Space>"] = cmp.mapping.complete(),
-        ["<Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_next_item()
-          elseif require("luasnip").expand_or_jumpable() then
-            require("luasnip").expand_or_jump()
-          else
-            fallback()
-          end
-        end, { "i", "s" }),
-        ["<S-Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_prev_item()
-          elseif require("luasnip").jumpable(-1) then
-            require("luasnip").jump(-1)
-          else
-            fallback()
-          end
-        end, { "i", "s" }),
-      }),
-    })
+    local capabilities = require("cmp_nvim_lsp").default_capabilities()
   end,
 }
