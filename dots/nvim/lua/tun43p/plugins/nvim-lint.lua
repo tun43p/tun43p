@@ -19,7 +19,7 @@ return {
 			javascript = { "eslint_d" },
 			javascriptreact = { "eslint_d" },
 			kotlin = { "ktlint" },
-			lua = { "luacheck" },
+			-- lua = { "luacheck" },
 			markdown = { "markdownlint" },
 			python = { "ruff" },
 			scss = { "eslint_d" },

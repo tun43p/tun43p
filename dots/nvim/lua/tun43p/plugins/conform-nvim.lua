@@ -21,7 +21,7 @@ return {
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 				javascriptreact = { "prettierd", "prettier", stop_after_first = true },
         kotlin = { "ktlint" },
-				lua = { "stylua" },
+				-- lua = { "stylua" },
 				markdown = { "prettierd", "prettier", stop_after_first = true },
 				python = { "ruff" },
 				scss = { "prettierd", "prettier", stop_after_first = true },
