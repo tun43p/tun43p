@@ -21,7 +21,7 @@ return {
 			kotlin = { "ktlint" },
 			lua = { "luacheck" },
 			markdown = { "markdownlint" },
-			python = { "pylint" },
+			python = { "ruff" },
 			scss = { "eslint_d" },
 			svelte = { "eslint_d" },
 			typescript = { "eslint_d" },

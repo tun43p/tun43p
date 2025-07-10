@@ -23,7 +23,7 @@ return {
         kotlin = { "ktlint" },
 				lua = { "stylua" },
 				markdown = { "prettierd", "prettier", stop_after_first = true },
-				python = { "black" },
+				python = { "ruff" },
 				scss = { "prettierd", "prettier", stop_after_first = true },
 				svelte = { "prettierd", "prettier", stop_after_first = true },
 				typescript = { "prettierd", "prettier", stop_after_first = true },
