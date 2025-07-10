@@ -1,191 +1,204 @@
 return {
   "neovim/nvim-lspconfig",
   dependencies = {
-      { "williamboman/mason.nvim" },
-      { "williamboman/mason-lspconfig.nvim" },
-      { "hrsh7th/nvim-cmp" },
-      { "hrsh7th/cmp-nvim-lsp" },
-      { "L3MON4D3/LuaSnip" },
-      { "rafamadriz/friendly-snippets" },
-      { "hrsh7th/cmp-buffer" },
-      { "hrsh7th/cmp-path" },
-      { "hrsh7th/cmp-cmdline" },
-      { "saadparwaiz1/cmp_luasnip" },
+    { "williamboman/mason.nvim" },
+    { "williamboman/mason-lspconfig.nvim" },
+    { "hrsh7th/nvim-cmp" },
+    { "hrsh7th/cmp-nvim-lsp" },
+    { "L3MON4D3/LuaSnip" },
+    { "rafamadriz/friendly-snippets" },
+    { "hrsh7th/cmp-buffer" },
+    { "hrsh7th/cmp-path" },
+    { "hrsh7th/cmp-cmdline" },
+    { "saadparwaiz1/cmp_luasnip" },
   },
-	config = function()
-		require("mason").setup({})
-		require("mason-lspconfig").setup({
-			ensure_installed = {
-        "bashls", -- Bash
-        "clangd", -- C/C++
-        "cmake", -- CMake
-        "dockerls", -- Dockefile
+  config = function()
+    require("mason").setup({})
+    require("mason-lspconfig").setup({
+      ensure_installed = {
+        "bashls",                          -- Bash
+        "clangd",                          -- C/C++
+        "cmake",                           -- CMake
+        "dockerls",                        -- Dockefile
         "docker_compose_language_service", -- Docker Compose
-        "jsonls", -- JSON
-        "lua_ls", -- Lua
-        "marksman", -- Markdown
-				"ruff", -- Python
-				"yamlls", -- YAML
+        "jsonls",                          -- JSON
+        "lua_ls",                          -- Lua
+        "marksman",                        -- Markdown
+        -- "ruff",                         -- Python (installed with pip)
+        "yamlls",                          -- YAML
 
         -- TODO(tun43p): https://mason-registry.dev/registry/list
-				-- "astro-language-server", -- Astro
-				-- "bash-language-server", -- Bash
-				-- "clangd", -- C/C++
-				-- "cmake-language-server", -- CMake
-				-- "css-lsp", -- CSS
-				-- "deno", -- Deno
-				-- "dockerfile-language-server", -- Dockefile
-				-- "docker-compose-language-server", -- Docker Compose
-				-- "eslint-lsp", -- Eslint
-				-- "golangci-lint-langserver", -- Golang
-				-- "gitlab-ci-ls", -- Gitlab CI
-				-- "gradle-language-server", -- Gradle
-				-- "html-lsp", -- HTML
-				-- "json-lsp", -- JSON
-				-- "kotlin-language-server", -- Kotlin
-				-- "lua-language-server", -- Lua
-				-- "marksman", -- Markdown
-				-- "prisma-language-server", -- Prisma
-				-- "python-language-server", -- Python
-				-- "taplo", -- TOML
-				-- "solidity", -- Solidity
-				-- "tailwindcss-language-server", -- Tailwind CSS
-				-- "vue-language-server", -- Vue
-			},
-			handlers = {
-				function(server_name)
-					-- Configuration par défaut pour tous les serveurs
-					vim.lsp.config(server_name, {})
-				end,
+        -- "astro-language-server", -- Astro
+        -- "bash-language-server", -- Bash
+        -- "clangd", -- C/C++
+        -- "cmake-language-server", -- CMake
+        -- "css-lsp", -- CSS
+        -- "deno", -- Deno
+        -- "dockerfile-language-server", -- Dockefile
+        -- "docker-compose-language-server", -- Docker Compose
+        -- "eslint-lsp", -- Eslint
+        -- "golangci-lint-langserver", -- Golang
+        -- "gitlab-ci-ls", -- Gitlab CI
+        -- "gradle-language-server", -- Gradle
+        -- "html-lsp", -- HTML
+        -- "json-lsp", -- JSON
+        -- "kotlin-language-server", -- Kotlin
+        -- "lua-language-server", -- Lua
+        -- "marksman", -- Markdown
+        -- "prisma-language-server", -- Prisma
+        -- "python-language-server", -- Python
+        -- "taplo", -- TOML
+        -- "solidity", -- Solidity
+        -- "tailwindcss-language-server", -- Tailwind CSS
+        -- "vue-language-server", -- Vue
+      },
+      handlers = {
+        function(server_name)
+          vim.lsp.config(server_name, {})
+        end,
 
-				["lua_ls"] = function()
-					vim.lsp.config("lua_ls", {
-						settings = {
-							Lua = {
-								diagnostics = {
-									globals = { "vim" }
-								}
-							}
-						}
-					})
-				end,
-			},
-		})
+        ["lua_ls"] = function()
+          vim.lsp.config("lua_ls", {
+            settings = {
+              Lua = {
+                diagnostics = {
+                  globals = { "vim" }
+                }
+              }
+            }
+          })
+        end,
+      },
+    })
 
-		-- Activer les serveurs LSP
-		local servers = require("mason-lspconfig").get_installed_servers()
-		for _, server in ipairs(servers) do
-			vim.lsp.enable(server)
-		end
+    -- Activer les serveurs LSP
+    local servers = require("mason-lspconfig").get_installed_servers()
+    for _, server in ipairs(servers) do
+      vim.lsp.enable(server)
+    end
+    
+    -- Définir les keybinds globalement pour tous les buffers
+    local function setup_global_keymaps()
+      -- Navigation
+      vim.keymap.set("n", "gd", function()
+        vim.lsp.buf.definition()
+      end, { desc = "LSP Goto Definition" })
+      
+      vim.keymap.set("n", "gr", function()
+        vim.lsp.buf.references()
+      end, { desc = "LSP Goto References" })
+      
+      vim.keymap.set("n", "gi", function()
+        vim.lsp.buf.implementation()
+      end, { desc = "LSP Goto Implementation" })
+      
+      vim.keymap.set("n", "gt", function()
+        vim.lsp.buf.type_definition()
+      end, { desc = "LSP Goto Type Definition" })
+      
+      -- Diagnostics
+      vim.keymap.set("n", "gl", function()
+        vim.diagnostic.open_float()
+      end, { desc = "Show Line Diagnostics" })
+      
+      vim.keymap.set("n", "[d", function()
+        vim.diagnostic.goto_prev()
+      end, { desc = "Previous Diagnostic" })
+      
+      vim.keymap.set("n", "]d", function()
+        vim.diagnostic.goto_next()
+      end, { desc = "Next Diagnostic" })
+      
+      -- Actions
+      vim.keymap.set("n", "<leader>pa", function()
+        vim.lsp.buf.code_action()
+      end, { desc = "LSP Code Action" })
+      
+      vim.keymap.set("n", "<leader>pr", function()
+        vim.lsp.buf.rename()
+      end, { desc = "LSP Rename" })
+      
+      vim.keymap.set("n", "<leader>pf", function()
+        vim.lsp.buf.format({ async = true })
+      end, { desc = "LSP Format" })
+      
+      -- Workspace
+      vim.keymap.set("n", "<leader>ps", function()
+        vim.lsp.buf.workspace_symbol()
+      end, { desc = "LSP Workspace Symbol" })
+      
+      vim.keymap.set("n", "<leader>pd", function()
+        vim.diagnostic.setloclist()
+      end, { desc = "LSP Diagnostics List" })
+    end
+    
+    -- Configurer les keymaps globaux
+    setup_global_keymaps()
 
-		-- Configuration des diagnostics
-		vim.diagnostic.config({
-			virtual_text = true,      -- Afficher le texte virtuel à côté des lignes avec des diagnostics
-			signs = true,           -- Afficher les signes dans la colonne des signes
-			underline = true,       -- Souligner le texte avec des diagnostics
-			update_in_insert = false, -- Ne pas mettre à jour les diagnostics en mode insertion
-			severity_sort = true,   -- Trier les diagnostics par sévérité
-			float = {
-				focusable = true,
-				style = "minimal",
-				border = "rounded",
-				source = "always",
-				header = "",
-				prefix = "",
-			},
-		})
+    -- Configuration des diagnostics
+    vim.diagnostic.config({
+      virtual_text = true,      -- Afficher le texte virtuel à côté des lignes avec des diagnostics
+      signs = true,             -- Afficher les signes dans la colonne des signes
+      underline = true,         -- Souligner le texte avec des diagnostics
+      update_in_insert = false, -- Ne pas mettre à jour les diagnostics en mode insertion
+      severity_sort = true,     -- Trier les diagnostics par sévérité
+      float = {
+        focusable = true,
+        style = "minimal",
+        border = "rounded",
+        source = "always",
+        header = "",
+        prefix = "",
+      },
+    })
 
-		-- Configuration des keymaps LSP
-		vim.api.nvim_create_autocmd('LspAttach', {
-			group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-			callback = function(ev)
-				local opts = { buffer = ev.buf, remap = false }
-
-				-- vim.keymap.set("n", "gr", function()
-				-- 	vim.lsp.buf.references()
-				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Reference" }))
-				-- vim.keymap.set("n", "gd", function()
-				-- 	vim.lsp.buf.definition()
-				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Definition" }))
-				-- -- Afficher la documentation et les diagnostics en hover
-				-- vim.keymap.set("n", "K", function()
-				-- 	-- Vérifier s'il y a des diagnostics à la position actuelle
-				-- 	local line = vim.fn.line(".")-1
-				-- 	local character = vim.fn.col(".")-1
-				-- 	local diagnostics = vim.diagnostic.get(ev.buf, { lnum = line })
-					
-				-- 	if #diagnostics > 0 then
-				-- 		-- S'il y a des diagnostics, les afficher
-				-- 		vim.diagnostic.open_float({ bufnr = ev.buf, pos = { line, character }, scope = "cursor" })
-				-- 	else
-				-- 		-- Sinon, afficher la documentation normale
-				-- 		vim.lsp.buf.hover()
-				-- 	end
-				-- end, 
+    -- Configuration des keymaps LSP spécifiques aux buffers
+    vim.api.nvim_create_autocmd('LspAttach', {
+      group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+      callback = function(ev)
+        local opts = { buffer = ev.buf, remap = false }
         
-        -- vim.tbl_deep_extend("force", opts, { desc = "LSP Hover" }))
-				-- vim.keymap.set("n", "<leader>ph", function()
-				-- 	vim.lsp.buf.workspace_symbol()
-				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Workspace Symbol" }))
-				-- vim.keymap.set("n", "<leader>ps", function()
-				-- 	vim.diagnostic.setloclist()
-				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Show Diagnostics" }))
-				
-				-- Raccourci supplémentaire pour afficher les diagnostics dans un float
-				-- vim.keymap.set("n", "gl", function()
-				-- 	vim.diagnostic.open_float()
-				-- end, vim.tbl_deep_extend("force", opts, { desc = "Show Line Diagnostics" }))
-				-- vim.keymap.set("n", "[d", function()
-				-- 	vim.diagnostic.goto_next()
-				-- end, vim.tbl_deep_extend("force", opts, { desc = "Next Diagnostic" }))
-				-- vim.keymap.set("n", "]d", function()
-				-- 	vim.diagnostic.goto_prev()
-				-- end, vim.tbl_deep_extend("force", opts, { desc = "Previous Diagnostic" }))
-				-- vim.keymap.set("n", "<leader>pp", function()
-				-- 	vim.lsp.buf.code_action()
-				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Code Action" }))
-				-- vim.keymap.set("n", "<leader>pa", function()
-				-- 	vim.lsp.buf.references()
-				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP References" }))
-				-- vim.keymap.set("n", "<leader>pr", function()
-				-- 	vim.lsp.buf.rename()
-				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Rename" }))
-				-- vim.keymap.set("i", "<C-h>", function()
-				-- 	vim.lsp.buf.signature_help()
-				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Signature Help" }))
-			end,
-		})
+        -- Information et documentation spécifiques au buffer
+        vim.keymap.set("n", "K", function()
+          vim.lsp.buf.hover()
+        end, vim.tbl_deep_extend("force", opts, { desc = "LSP Hover Documentation" }))
+        
+        vim.keymap.set("i", "<C-k>", function()
+          vim.lsp.buf.signature_help()
+        end, vim.tbl_deep_extend("force", opts, { desc = "LSP Signature Help" }))
+      end,
+    })
 
-     -- Configuration de nvim-cmp
-     local cmp = require("cmp")
-     local cmp_select = { behavior = cmp.SelectBehavior.Select }
+    -- Configuration de nvim-cmp
+    local cmp = require("cmp")
+    local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
-     require("luasnip.loaders.from_vscode").lazy_load()
+    require("luasnip.loaders.from_vscode").lazy_load()
 
-     -- `/` cmdline setup.
-     cmp.setup.cmdline("/", {
-         mapping = cmp.mapping.preset.cmdline(),
-         sources = {
-             { name = "buffer" },
-         },
-     })
+    -- `/` cmdline setup.
+    cmp.setup.cmdline("/", {
+      mapping = cmp.mapping.preset.cmdline(),
+      sources = {
+        { name = "buffer" },
+      },
+    })
 
-     -- `:` cmdline setup.
-     cmp.setup.cmdline(":", {
-         mapping = cmp.mapping.preset.cmdline(),
-         sources = cmp.config.sources({
-             { name = "path" },
-         }, {
-             {
-                 name = "cmdline",
-                 option = {
-                     ignore_cmds = { "Man", "!" },
-                 },
-             },
-         }),
-     })
+    -- `:` cmdline setup.
+    cmp.setup.cmdline(":", {
+      mapping = cmp.mapping.preset.cmdline(),
+      sources = cmp.config.sources({
+        { name = "path" },
+      }, {
+        {
+          name = "cmdline",
+          option = {
+            ignore_cmds = { "Man", "!" },
+          },
+        },
+      }),
+    })
 
-     cmp.setup({
+    cmp.setup({
       snippet = {
         expand = function(args)
           require("luasnip").lsp_expand(args.body)
@@ -194,7 +207,7 @@ return {
       sources = {
         { name = "nvim_lsp" },
         { name = "luasnip", keyword_length = 2 },
-        { name = "buffer", keyword_length = 3 },
+        { name = "buffer",  keyword_length = 3 },
         { name = "path" },
       },
       mapping = cmp.mapping.preset.insert({
@@ -222,5 +235,5 @@ return {
         end, { "i", "s" }),
       }),
     })
-	end,
+  end,
 }
