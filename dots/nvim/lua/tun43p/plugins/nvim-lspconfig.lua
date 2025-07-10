@@ -78,45 +78,81 @@ return {
 			vim.lsp.enable(server)
 		end
 
+		-- Configuration des diagnostics
+		vim.diagnostic.config({
+			virtual_text = true,      -- Afficher le texte virtuel à côté des lignes avec des diagnostics
+			signs = true,           -- Afficher les signes dans la colonne des signes
+			underline = true,       -- Souligner le texte avec des diagnostics
+			update_in_insert = false, -- Ne pas mettre à jour les diagnostics en mode insertion
+			severity_sort = true,   -- Trier les diagnostics par sévérité
+			float = {
+				focusable = true,
+				style = "minimal",
+				border = "rounded",
+				source = "always",
+				header = "",
+				prefix = "",
+			},
+		})
+
 		-- Configuration des keymaps LSP
 		vim.api.nvim_create_autocmd('LspAttach', {
 			group = vim.api.nvim_create_augroup('UserLspConfig', {}),
 			callback = function(ev)
 				local opts = { buffer = ev.buf, remap = false }
 
-				vim.keymap.set("n", "gr", function()
-					vim.lsp.buf.references()
-				end, vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Reference" }))
-				vim.keymap.set("n", "gd", function()
-					vim.lsp.buf.definition()
-				end, vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Definition" }))
-				vim.keymap.set("n", "K", function()
-					vim.lsp.buf.hover()
-				end, vim.tbl_deep_extend("force", opts, { desc = "LSP Hover" }))
-				vim.keymap.set("n", "<leader>vws", function()
-					vim.lsp.buf.workspace_symbol()
-				end, vim.tbl_deep_extend("force", opts, { desc = "LSP Workspace Symbol" }))
-				vim.keymap.set("n", "<leader>vd", function()
-					vim.diagnostic.setloclist()
-				end, vim.tbl_deep_extend("force", opts, { desc = "LSP Show Diagnostics" }))
-				vim.keymap.set("n", "[d", function()
-					vim.diagnostic.goto_next()
-				end, vim.tbl_deep_extend("force", opts, { desc = "Next Diagnostic" }))
-				vim.keymap.set("n", "]d", function()
-					vim.diagnostic.goto_prev()
-				end, vim.tbl_deep_extend("force", opts, { desc = "Previous Diagnostic" }))
-				vim.keymap.set("n", "<leader>vca", function()
-					vim.lsp.buf.code_action()
-				end, vim.tbl_deep_extend("force", opts, { desc = "LSP Code Action" }))
-				vim.keymap.set("n", "<leader>vrr", function()
-					vim.lsp.buf.references()
-				end, vim.tbl_deep_extend("force", opts, { desc = "LSP References" }))
-				vim.keymap.set("n", "<leader>vrn", function()
-					vim.lsp.buf.rename()
-				end, vim.tbl_deep_extend("force", opts, { desc = "LSP Rename" }))
-				vim.keymap.set("i", "<C-h>", function()
-					vim.lsp.buf.signature_help()
-				end, vim.tbl_deep_extend("force", opts, { desc = "LSP Signature Help" }))
+				-- vim.keymap.set("n", "gr", function()
+				-- 	vim.lsp.buf.references()
+				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Reference" }))
+				-- vim.keymap.set("n", "gd", function()
+				-- 	vim.lsp.buf.definition()
+				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Definition" }))
+				-- -- Afficher la documentation et les diagnostics en hover
+				-- vim.keymap.set("n", "K", function()
+				-- 	-- Vérifier s'il y a des diagnostics à la position actuelle
+				-- 	local line = vim.fn.line(".")-1
+				-- 	local character = vim.fn.col(".")-1
+				-- 	local diagnostics = vim.diagnostic.get(ev.buf, { lnum = line })
+					
+				-- 	if #diagnostics > 0 then
+				-- 		-- S'il y a des diagnostics, les afficher
+				-- 		vim.diagnostic.open_float({ bufnr = ev.buf, pos = { line, character }, scope = "cursor" })
+				-- 	else
+				-- 		-- Sinon, afficher la documentation normale
+				-- 		vim.lsp.buf.hover()
+				-- 	end
+				-- end, 
+        
+        -- vim.tbl_deep_extend("force", opts, { desc = "LSP Hover" }))
+				-- vim.keymap.set("n", "<leader>ph", function()
+				-- 	vim.lsp.buf.workspace_symbol()
+				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Workspace Symbol" }))
+				-- vim.keymap.set("n", "<leader>ps", function()
+				-- 	vim.diagnostic.setloclist()
+				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Show Diagnostics" }))
+				
+				-- Raccourci supplémentaire pour afficher les diagnostics dans un float
+				-- vim.keymap.set("n", "gl", function()
+				-- 	vim.diagnostic.open_float()
+				-- end, vim.tbl_deep_extend("force", opts, { desc = "Show Line Diagnostics" }))
+				-- vim.keymap.set("n", "[d", function()
+				-- 	vim.diagnostic.goto_next()
+				-- end, vim.tbl_deep_extend("force", opts, { desc = "Next Diagnostic" }))
+				-- vim.keymap.set("n", "]d", function()
+				-- 	vim.diagnostic.goto_prev()
+				-- end, vim.tbl_deep_extend("force", opts, { desc = "Previous Diagnostic" }))
+				-- vim.keymap.set("n", "<leader>pp", function()
+				-- 	vim.lsp.buf.code_action()
+				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Code Action" }))
+				-- vim.keymap.set("n", "<leader>pa", function()
+				-- 	vim.lsp.buf.references()
+				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP References" }))
+				-- vim.keymap.set("n", "<leader>pr", function()
+				-- 	vim.lsp.buf.rename()
+				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Rename" }))
+				-- vim.keymap.set("i", "<C-h>", function()
+				-- 	vim.lsp.buf.signature_help()
+				-- end, vim.tbl_deep_extend("force", opts, { desc = "LSP Signature Help" }))
 			end,
 		})
 
