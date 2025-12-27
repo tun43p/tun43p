@@ -104,6 +104,9 @@ if status is-interactive
     alias la "ls -lA --color=always"
     alias l "ls -CF --color=always"
 
+    # Launch NSUI as a wine application
+    alias nsui "cd $HOME/Documents/NSUI; wine New\ Super\ Ultimate\ Injector\ for\ 3DS.exe"
+
     # Edit configuration files
     alias dots "nvim $DOTFILES"
 
@@ -115,3 +118,6 @@ if status is-interactive
     source $HOME/.config/fish/config.private.fish
 end
 
+# Add bun to PATH
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
