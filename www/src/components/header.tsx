@@ -14,10 +14,10 @@ export default function HeaderComponent(): JSX.Element {
       name: "home",
       href: "/",
     },
-    {
-      name: "logs",
-      href: "/logs",
-    },
+    // { // TODO: Enable logs
+    //   name: "logs",
+    //   href: "/logs",
+    // },
     {
       name: "contact",
       href: "/contact",
