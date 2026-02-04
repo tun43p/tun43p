@@ -1,4 +1,6 @@
 fish/**/*.private.fish
+fish/completions
+fish/conf.d
 fish/fish_variables
 
 git/conf.d

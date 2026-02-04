@@ -111,6 +111,16 @@ if status is-interactive
     status --is-interactive; and . (pyenv init -|psub)
     status --is-interactive; and pyenv virtualenv-init - | source
 
+    # Set global Node version
+    set --universal nvm_default_version latest 
+
+    # Add bun to PATH
+    set --export BUN_INSTALL "$HOME/.bun"
+    set --export PATH $BUN_INSTALL/bin $PATH
+
+    # Source Google Cloud SDK
+    source /opt/homebrew/share/google-cloud-sdk/path.fish.inc
+
     # Source private configuration file
     source $HOME/.config/fish/config.private.fish
 end
