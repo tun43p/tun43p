@@ -107,6 +107,9 @@ if status is-interactive
     # Edit configuration files
     alias dots "nvim $DOTFILES"
 
+    # Set up fzf key bindings
+    fzf --fish | source
+
     # Initialize PyEnv
     status --is-interactive; and . (pyenv init -|psub)
     status --is-interactive; and pyenv virtualenv-init - | source
