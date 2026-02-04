@@ -121,6 +121,13 @@ tell application "Terminal"
 end tell'
 '''
 
+# Close current window
+alt-shift-a = 'close'
+
+# Fullscreen current window
+alt-f = 'fullscreen'
+alt-shift-f = 'macos-native-fullscreen'
+
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-m = 'layout tiles horizontal vertical' # alt + m is equal to alt + comma with azerty keyboard
 alt-shift-m = 'layout accordion horizontal vertical' # alt + shift + m is equal to alt + shift + comma with azerty keyboard
