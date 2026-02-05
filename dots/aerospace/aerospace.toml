@@ -67,6 +67,10 @@ run = 'layout floating'
 if.app-name-regex-substring = 'quicktime'
 run = 'layout floating'
 
+[[on-window-detected]]
+if.app-id = 'com.apple.Passwords'
+run = 'layout floating'
+
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
@@ -93,6 +97,9 @@ outer.right = 20
 # 'main' binding mode must be always presented
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
+
+cmd-h = []     # Disable "hide application"
+cmd-alt-h = [] # Disable "hide others"
 
 # All possible keys:
 # - Letters.        a, b, c, ..., z
@@ -171,18 +178,6 @@ alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
 alt-0 = 'workspace 10'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-alt-ctrl-1 = 'move-node-to-workspace 1'
-alt-ctrl-2 = 'move-node-to-workspace 2'
-alt-ctrl-3 = 'move-node-to-workspace 3'
-alt-ctrl-4 = 'move-node-to-workspace 4'
-alt-ctrl-5 = 'move-node-to-workspace 5'
-alt-ctrl-6 = 'move-node-to-workspace 6'
-alt-ctrl-7 = 'move-node-to-workspace 7'
-alt-ctrl-8 = 'move-node-to-workspace 8'
-alt-ctrl-9 = 'move-node-to-workspace 9'
-alt-ctrl-0 = 'move-node-to-workspace 10'
-
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
 
@@ -191,27 +186,41 @@ alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 alt-shift-space = 'mode service'
+alt-shift-semicolon = "mode move"
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
-r = ['flatten-workspace-tree', 'mode main'] # reset layout
-f = [
-  'layout floating tiling',
-  'mode main',
-] # Toggle between floating and tiling layout
+r = ['flatten-workspace-tree', 'mode main']
+f = ['layout floating tiling', 'mode main']
 backspace = ['close-all-windows-but-current', 'mode main']
-
-# Join windows to make an i3 like workspace
-alt-shift-h = ['join-with left', 'mode main']
-alt-shift-left = ['join-with left', 'mode main']
-alt-shift-j = ['join-with down', 'mode main']
-alt-shift-down = ['join-with down', 'mode main']
-alt-shift-k = ['join-with up', 'mode main']
-alt-shift-up = ['join-with up', 'mode main']
-alt-shift-l = ['join-with right', 'mode main']
-alt-shift-right = ['join-with right', 'mode main']
-
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']
+
+# 'move' binding mode declaration.
+# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
+[mode.move.binding]
+esc = ['reload-config', 'mode main']
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
+1 = ['move-node-to-workspace 1', 'mode main']
+2 = ['move-node-to-workspace 2', 'mode main']
+3 = ['move-node-to-workspace 3', 'mode main']
+4 = ['move-node-to-workspace 4', 'mode main']
+5 = ['move-node-to-workspace 5', 'mode main']
+6 = ['move-node-to-workspace 6', 'mode main']
+7 = ['move-node-to-workspace 7', 'mode main']
+8 = ['move-node-to-workspace 8', 'mode main']
+9 = ['move-node-to-workspace 9', 'mode main']
+0 = ['move-node-to-workspace 10', 'mode main']
+
+# Join windows to make an i3 like workspace
+h = ['join-with left', 'mode main']
+left = ['join-with left', 'mode main']
+j = ['join-with down', 'mode main']
+down = ['join-with down', 'mode main']
+k = ['join-with up', 'mode main']
+up = ['join-with up', 'mode main']
+l = ['join-with right', 'mode main']
+right = ['join-with right', 'mode main']
