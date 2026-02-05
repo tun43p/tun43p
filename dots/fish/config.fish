@@ -107,6 +107,9 @@ if status is-interactive
     # Edit configuration files
     alias dots "nvim $DOTFILES"
 
+    # Refresh GPG agent
+    alias refresh_gpg "gpgconf --kill gpg-agent; gpg-agent --daemon"
+
     # Set up fzf key bindings
     fzf --fish | source
 
