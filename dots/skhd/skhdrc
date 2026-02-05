@@ -7,11 +7,17 @@
 # Application Launchers
 # ================================================================
 
-# Open Terminal - new window in same app instance
+# Open terminal - new window in same app instance
 lalt - return : osascript -e 'tell application "Terminal" to do script ""' && open -a Terminal
 
-# Open Firefox
+# Open browser 
 lalt - b: open -na "/Applications/Google Chrome.app"
+
+# Open code editor
+lalt - e: open -na "/Applications/Windsurf.app" --args --new-window
+
+# Open terminal app with nvim launched
+lalt + shift - e: osascript -e 'tell application "Terminal" to do script "nvim"'
 
 # ================================================================
 # Window Management
