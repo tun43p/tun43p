@@ -7,11 +7,11 @@
 # Application Launchers
 # ================================================================
 
-# Open Terminal
-lalt - return: open -na /System/Applications/Utilities/Terminal.app
+# Open Terminal - new window in same app instance
+lalt - return : osascript -e 'tell application "Terminal" to do script ""' && open -a Terminal
 
 # Open Firefox
-lalt - b: open -na /Applications/Firefox.app
+lalt - b: open -na "/Applications/Google Chrome.app"
 
 # ================================================================
 # Window Management
