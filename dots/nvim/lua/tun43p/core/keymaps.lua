@@ -55,6 +55,10 @@ vim.keymap.set("n", "<leader><right>", "<c-w>l", { desc = "Jump to right split" 
 vim.keymap.set("n", "<tab>", ":bn<cr>", { silent = true, desc = "Navigate to next buffer" })
 vim.keymap.set("n", "<s-tab>", ":bp<cr>", { silent = true, desc = "Navigate to previous buffer" })
 
+-- close buffers with space + x
+vim.keymap.set("n", "<leader>x", ":bdelete<cr>", { silent = true, desc = "Close current buffer" })
+vim.keymap.set("n", "<leader>X", ":%bd|e#|bd#<cr>", { silent = true, desc = "Close all other buffers" })
+
 -- indenting in visual mode with tab or shift + tab
 vim.keymap.set("v", "<tab>", ">gv", { desc = "Add a tabulation" })
 vim.keymap.set("v", "<s-tab>", "<gv", { desc = "Remove a tabulation" })
