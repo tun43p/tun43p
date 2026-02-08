@@ -1,12 +1,3 @@
-# ================================================================
-# skhd configuration for AeroSpace window manager
-# Using lalt (left alt) to avoid conflicts with AltGr on AZERTY keyboards
-# ================================================================
-
-# ================================================================
-# Application Launchers
-# ================================================================
-
 # Open terminal - new window in same app instance
 lalt - return : osascript -e 'tell application "Terminal" to do script ""' && open -a Terminal
 
@@ -18,10 +9,6 @@ lalt - e: open -na "/Applications/Windsurf.app" --args --new-window
 
 # Open terminal app with nvim launched
 lalt + shift - e: osascript -e 'tell application "Terminal" to do script "nvim"'
-
-# ================================================================
-# Window Management
-# ================================================================
 
 # Floating window toggle
 lalt - f: aerospace layout floating tiling
@@ -38,10 +25,6 @@ lalt + shift - m: aerospace layout accordion horizontal vertical
 lalt + shift - f: aerospace fullscreen
 lalt + ctrl - f: aerospace macos-native-fullscreen
 
-# ================================================================
-# Focus Navigation
-# ================================================================
-
 # Focus left
 lalt - h: aerospace focus left
 lalt - left: aerospace focus left
@@ -57,10 +40,6 @@ lalt - up: aerospace focus up
 # Focus right
 lalt - l: aerospace focus right
 lalt - right: aerospace focus right
-
-# ================================================================
-# Move Windows
-# ================================================================
 
 # Move left
 lalt + shift - h: aerospace move left
@@ -79,49 +58,37 @@ lalt + shift - l: aerospace move right
 lalt + shift - right: aerospace move right
 
 # Move window to workspace
-lalt + shift - 0x12: aerospace move-node-to-workspace 1
-lalt + shift - 0x13: aerospace move-node-to-workspace 2
-lalt + shift - 0x14: aerospace move-node-to-workspace 3
-lalt + shift - 0x15: aerospace move-node-to-workspace 4
-lalt + shift - 0x17: aerospace move-node-to-workspace 5
-lalt + shift - 0x16: aerospace move-node-to-workspace 6
-lalt + shift - 0x1A: aerospace move-node-to-workspace 7
-lalt + shift - 0x1C: aerospace move-node-to-workspace 8
-lalt + shift - 0x19: aerospace move-node-to-workspace 9
-lalt + shift - 0x1D: aerospace move-node-to-workspace 10
-
-# ================================================================
-# Resize Windows
-# ================================================================
+lalt + shift - 0x12: aerospace move-node-to-workspace 1 # 1
+lalt + shift - 0x13: aerospace move-node-to-workspace 2 # 2
+lalt + shift - 0x14: aerospace move-node-to-workspace 3 # 3
+lalt + shift - 0x15: aerospace move-node-to-workspace 4 # 4
+lalt + shift - 0x17: aerospace move-node-to-workspace 5 # 5
+lalt + shift - 0x16: aerospace move-node-to-workspace 6 # 6
+lalt + shift - 0x1A: aerospace move-node-to-workspace 7 # 7
+lalt + shift - 0x1C: aerospace move-node-to-workspace 8 # 8
+lalt + shift - 0x19: aerospace move-node-to-workspace 9 # 9
+lalt + shift - 0x1D: aerospace move-node-to-workspace 10 # 0
 
 lalt - 0x1B: aerospace resize smart -50 # minus
 lalt - 0x18: aerospace resize smart +50 # right parenthesis
 
-# ================================================================
-# Workspace Navigation
-# ================================================================
-
 # Switch to workspace
-lalt - 0x12: aerospace workspace 1
-lalt - 0x13: aerospace workspace 2
-lalt - 0x14: aerospace workspace 3
-lalt - 0x15: aerospace workspace 4
-lalt - 0x17: aerospace workspace 5
-lalt - 0x16: aerospace workspace 6
-lalt - 0x1A: aerospace workspace 7
-lalt - 0x1C: aerospace workspace 8
-lalt - 0x19: aerospace workspace 9
-lalt - 0x1D: aerospace workspace 10
+lalt - 0x12: aerospace workspace 1 # 1
+lalt - 0x13: aerospace workspace 2 # 2
+lalt - 0x14: aerospace workspace 3 # 3
+lalt - 0x15: aerospace workspace 4 # 4
+lalt - 0x17: aerospace workspace 5 # 5
+lalt - 0x16: aerospace workspace 6 # 6
+lalt - 0x1A: aerospace workspace 7 # 7
+lalt - 0x1C: aerospace workspace 8 # 8
+lalt - 0x19: aerospace workspace 9 # 9
+lalt - 0x1D: aerospace workspace 10 # 0
 
 # Workspace back and forth
 lalt - tab: aerospace workspace-back-and-forth
 
 # Move workspace to next monitor
 lalt + shift - tab: aerospace move-workspace-to-monitor --wrap-around next
-
-# ================================================================
-# Join Windows
-# ================================================================
 
 # Join with left
 lalt + ctrl - h: aerospace join-with left
@@ -139,10 +106,11 @@ lalt + ctrl - up: aerospace join-with up
 lalt + ctrl - l: aerospace join-with right
 lalt + ctrl - right: aerospace join-with right
 
-# ================================================================
-# Switch Modes
-# ================================================================
-
+# Reload config
 lalt + shift - r: aerospace reload-config && skhd --reload
+
+# Flatten workspace tree
 lalt + shift - t: aerospace flatten-workspace-tree
+
+# Balance sizes
 lalt + shift - b: aerospace balance-sizes
