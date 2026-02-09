@@ -83,19 +83,23 @@ on-mode-changed = []
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 # Fallback value (if you omit the key): on-window-detected = []
 [[on-window-detected]]
-if.app-name-regex-substring = 'finder'
+if.app-id = 'com.apple.finder'
 run = 'layout floating'
 
 [[on-window-detected]]
-if.app-name-regex-substring = 'quicktime'
+if.app-id = 'com.apple.QuickTimePlayerX'
 run = 'layout floating'
 
 [[on-window-detected]]
-if.app-name-regex-substring = 'docker'
+if.app-id = 'com.docker.docker'
 run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Passwords'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
 run = 'layout floating'
 
 # Possible values: (qwerty|dvorak|colemak)
