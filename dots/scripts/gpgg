@@ -9,6 +9,8 @@ help() {
         echo ""
     fi
 
+    echo "GPG Utils"
+    echo ""
     echo "Usage: gpgg <help | list | config>"
     echo ""
     echo "Commands:"
@@ -23,6 +25,8 @@ help_config() {
         echo ""
     fi
 
+    echo "GPG Utils"
+    echo ""
     echo "Usage: gpgg config <touchid | tty>"
     echo ""
     echo "Commands:"
