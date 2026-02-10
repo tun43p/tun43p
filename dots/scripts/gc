@@ -1,0 +1,44 @@
+#!/bin/sh
+
+help() {
+    if [ -n "$1" ]; then
+        echo "Error: $1"
+        echo ""
+    fi
+
+    echo "Google Cloud Utils" 
+    echo ""
+    echo "Usage: gc <help | login | project>"
+    echo ""
+    echo "Commands:"
+    echo "  help, h        Show this help"
+    echo "  login, l       Login to Google Cloud"
+    echo "  project, p     Set the default project"
+}
+
+if [ $# -eq 0 ]; then
+    help
+    exit 1
+fi
+
+case "$1" in
+    help | h)
+        help
+        ;;
+    login | l)
+        gcloud auth login
+        gcloud auth application-default login
+        ;;
+    project | p)
+        if [ -z "$2" ]; then
+            gcloud projects list
+            exit 0
+        fi
+
+        gcloud config set project "$2"
+        ;;
+    *)
+        help "Unknown command"
+        exit 1
+        ;;
+esac
