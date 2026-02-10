@@ -62,6 +62,7 @@ if status is-interactive
     # Set custom directories
     set -gx CODE $DOCUMENTS/Code
     set -gx DOTFILES $CODE/github.com/tun43p/tun43p/dots
+    set -gx SCRIPTS $CODE/github.com/tun43p/tun43p/dots/scripts
 
     # Configure flags 
     set -gx LDFLAGS "-L/opt/local/lib -L$HOMEBREW/opt/zlib/lib -L$HOMEBREW/opt/readline/lib -L$HOMEBREW/opt/openssl/lib -L$ICU4C/lib"
@@ -84,13 +85,17 @@ if status is-interactive
         $CARGO_DIR/bin \
         $GOPATH/bin \
         $GEMS_PATH/bin \
-        $SOLANA_ACTIVE_RELEASE/bin
+        $SOLANA_ACTIVE_RELEASE/bin \
+        $SCRIPTS
 
     # Add Windsurf path
     fish_add_path /Users/tun43p/.codeium/windsurf/bin
 
     # Reload the shell
     alias reload "source $HOME/.config/fish/config.fish"
+    
+    # Terraform alias
+    alias tf "terraform"
 
     # Launch pinentry-mac as the default GPG agent
     alias pinentry pinentry-mac
