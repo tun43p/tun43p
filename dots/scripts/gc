@@ -26,8 +26,8 @@ case "$1" in
         help
         ;;
     login | l)
-        gcloud auth login
-        gcloud auth application-default login
+        gcloud auth login --no-browser
+        gcloud auth application-default login --no-browser
         ;;
     project | p)
         if [ -z "$2" ]; then
