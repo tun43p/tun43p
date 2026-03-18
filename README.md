@@ -1,5 +1,3 @@
-# Hi there 👋
-
 ![hello](./docs/hello.png)
 
 Lead developer focused on building complex software systems and AI-driven
