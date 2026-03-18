@@ -1,6 +1,6 @@
 # Hi there 👋
 
-![hello-there](./docs/hello-there.jpg)
+![hello](./docs/hello.png)
 
 Lead developer focused on building complex software systems and AI-driven
 workflows.
