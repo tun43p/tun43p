@@ -13,7 +13,7 @@ real business impact.
 
 Tech-wise, I mainly work with Go for production systems. I also use Python or
 TypeScript for AI, automation and rapid prototyping, with critical components
-often rewritten in Go, Zig or Rust afterward. For applications, I have
+often rewritten in Go or Zig afterward. For applications, I have
 experience with Flutter, SolidJS, Svelte and modern web stacks.
 
 I enjoy exploring new technologies and building things beyond pure engineering,
