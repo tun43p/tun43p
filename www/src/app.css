@@ -1,129 +1,218 @@
 @import "tailwindcss";
 
-:root {
-  --primary-rgb: 67, 227, 179;
+/* A tmux session: a whoami pane, a pane running a btop-like monitor, and the green status bar. */
+@theme {
+  --color-ink: #000;
+  --color-bone: #e8e6e1;
+  --color-ash: #8f8d88;
+  --color-dim: #57554f;
+  --color-rule: #262624;
+  --color-accent: #43e3b3;
+  --color-warn: #f5c344;
+  --color-hot: #ff5c39;
+  --font-mono: "Martian Mono", ui-monospace, Menlo, monospace;
 }
 
-* {
-  cursor: url(/default-cursor.gif), auto !important;
+html,
+body {
+  background: var(--color-ink);
+  color: var(--color-bone);
 }
 
 body {
-  background: black;
-  color: white;
-  font-family: "Menlo", monospace;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-stretch: 87.5%;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule) transparent;
 }
 
-h1 {
-  font-size: 2.2rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-}
-
-h2 {
-  font-size: 1.875rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-}
-
-h3 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-}
-
-h4 {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-}
-
-h5 {
-  font-size: 1.125rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-}
-
-h6 {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-}
-
-p {
-  margin-bottom: 1.5rem;
+* {
+  scrollbar-color: inherit;
+  scrollbar-width: inherit;
 }
 
 a {
-  color: rgb(var(--primary-rgb));
+  text-decoration: underline;
+  text-decoration-color: var(--color-dim);
+  text-underline-offset: 3px;
 }
 
 a:hover {
-  text-decoration: underline;
-  cursor: url(/pointer-cursor.gif), auto !important;
+  text-decoration-color: currentColor;
 }
 
-button {
-  opacity: 50%;
+:focus-visible {
+  outline: 1px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
-button:hover {
-  opacity: 100%;
-  cursor: url(/pointer-cursor.gif), auto !important;
+::selection {
+  background: var(--color-accent);
+  color: var(--color-ink);
 }
 
-ul {
+/* tmux layout */
+.desk {
+  display: grid;
+  gap: 1px;
+  background: var(--color-rule);
+  min-height: 100dvh;
+  padding-bottom: 24px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1100px) {
+  .desk {
+    height: 100dvh;
+    padding-bottom: 0;
+    grid-template-rows: auto minmax(0, 1fr) 24px;
+  }
+}
+
+.pane {
+  background: var(--color-ink);
   display: flex;
   flex-direction: column;
-  list-style-type: lower-latin;
-  gap: 0.5rem;
+  min-height: 0;
+  min-width: 0;
 }
 
-.glitch-text {
+.pane > header {
+  padding: 6px 12px;
+  color: var(--color-ash);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.bar {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 2;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+@media (min-width: 1100px) {
+  .bar {
+    position: static;
+  }
+}
+
+.bar a {
+  text-decoration: none;
+  padding: 0 0.6em;
+  line-height: 24px;
+}
+
+.bar a:hover {
+  background: var(--color-ink);
+  color: var(--color-accent);
+}
+
+.bar :focus-visible {
+  outline-color: var(--color-ink);
+  outline-offset: -2px;
+}
+
+/* btop layout: rounded boxes with the title cut into the top border */
+.top {
+  display: grid;
+  gap: 22px 14px;
+  padding: 20px 14px 18px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 220px auto 420px auto;
+  flex: 1;
+  min-height: 0;
+}
+
+@media (min-width: 1100px) {
+  .top {
+    grid-template-columns: minmax(0, 1fr) 26rem;
+    grid-template-rows: minmax(0, 0.75fr) minmax(0, 1.25fr);
+  }
+}
+
+.box {
   position: relative;
-  text-shadow:
-    2px 0 #f00,
-    -2px 0 #0f0,
-    0 2px #00f,
-    0 -2px #ff0;
-  animation: glitch 0.2s infinite;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  border: 1px solid var(--color-dim);
+  border-radius: 7px;
+  padding: 14px 14px 12px;
 }
 
-@keyframes glitch {
-  0% {
-    text-shadow:
-      2px 0 #f00,
-      -2px 0 #0f0,
-      0 2px #00f,
-      0 -2px #ff0;
-  }
-  25% {
-    text-shadow:
-      -2px 0 #f00,
-      2px 0 #0f0,
-      0 -2px #00f,
-      0 2px #ff0;
-  }
+.box > .label,
+.box > .hint {
+  position: absolute;
+  left: 10px;
+  padding: 0 5px;
+  background: var(--color-ink);
+  line-height: 1;
+}
+
+.box > .label {
+  top: -0.5em;
+  color: var(--color-bone);
+}
+
+.box > .hint {
+  bottom: -0.5em;
+  left: auto;
+  right: 10px;
+  color: var(--color-ash);
+}
+
+/* btop meter: a row of cells filled green to yellow to red */
+.meter {
+  height: 9px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-rule) 0 5px,
+    transparent 5px 7px
+  );
+}
+
+.meter > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(
+      90deg,
+      var(--color-accent),
+      var(--color-warn) 60%,
+      var(--color-hot)
+    )
+    0 0 / var(--track, 100%) 100%;
+  mask: repeating-linear-gradient(90deg, #000 0 5px, transparent 5px 7px);
+}
+
+.caret::after {
+  content: "";
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  vertical-align: text-bottom;
+  background: var(--color-bone);
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
   50% {
-    text-shadow:
-      0 2px #f00,
-      0 -2px #0f0,
-      2px 0 #00f,
-      -2px 0 #ff0;
+    opacity: 0;
   }
-  75% {
-    text-shadow:
-      0 -2px #f00,
-      0 2px #0f0,
-      -2px 0 #00f,
-      2px 0 #ff0;
-  }
-  100% {
-    text-shadow:
-      2px 0 #f00,
-      -2px 0 #0f0,
-      0 2px #00f,
-      0 -2px #ff0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret::after {
+    animation: none;
   }
 }

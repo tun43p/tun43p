@@ -3,28 +3,12 @@ import { MetaProvider } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 
-import HeaderComponent from "./components/header";
-import FooterComponent from "./components/footer";
-import LoadingComponent from "./components/loading";
-
 import "./app.css";
 
 export default function App(): JSX.Element {
   return (
     <MetaProvider>
-      <Router
-        root={(props) => {
-          return (
-            <div class="w-2xl mx-auto h-screen">
-              <Suspense fallback={<LoadingComponent />}>
-                <HeaderComponent />
-                {props.children}
-                <FooterComponent />
-              </Suspense>
-            </div>
-          );
-        }}
-      >
+      <Router root={(props) => <Suspense>{props.children}</Suspense>}>
         <FileRoutes />
       </Router>
     </MetaProvider>
