@@ -2,11 +2,14 @@
   "name": "tun43p",
   "type": "module",
   "scripts": {
+    "predev": "npm run contributions",
     "dev": "vinxi dev",
+    "prebuild": "npm run contributions",
     "build": "vinxi build",
     "start": "vinxi start",
     "lint": "eslint . --ext .ts,.tsx",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "contributions": "node scripts/contributions.mjs"
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.4",

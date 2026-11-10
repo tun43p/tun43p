@@ -27,3 +27,6 @@ gitignore
 # System Files
 .DS_Store
 Thumbs.db
+
+# Generated at build time by scripts/contributions.mjs
+src/core/contributions.json

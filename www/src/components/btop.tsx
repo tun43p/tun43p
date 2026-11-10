@@ -10,6 +10,27 @@ import {
 
 import { PROCS, type Proc, STACK, STATE } from "~/core/content";
 
+type Contributions = {
+  total: number;
+  days: { date: string; level: number; count: number }[];
+};
+
+// written by scripts/contributions.mjs at build time; missing in a fresh checkout until it runs
+const CONTRIBUTIONS = Object.values(
+  import.meta.glob("../core/contributions.json", {
+    eager: true,
+    import: "default",
+  }),
+)[0] as Contributions | undefined;
+
+const LEVEL = [
+  "var(--color-rule)",
+  "color-mix(in srgb, var(--color-accent) 30%, transparent)",
+  "color-mix(in srgb, var(--color-accent) 55%, transparent)",
+  "color-mix(in srgb, var(--color-accent) 80%, transparent)",
+  "var(--color-accent)",
+];
+
 const pad = (n: number): string => String(n).padStart(2, "0");
 const duration = (ms: number): string => {
   const s = Math.floor(ms / 1000);
@@ -43,7 +64,7 @@ export default function BtopComponent(props: Props): JSX.Element {
     <section class="pane" aria-label="process monitor">
       <header>btop</header>
       <div class="top">
-        <div class="box">
+        <div class="box [grid-area:cpu]">
           <span class="label">cpu</span>
           <span class="hint">
             1 human, {running()} busy cores, up{" "}
@@ -75,7 +96,7 @@ export default function BtopComponent(props: Props): JSX.Element {
           </div>
         </div>
 
-        <div class="box">
+        <div class="box [grid-area:mem]">
           <span class="label">mem</span>
           <span class="hint">stack</span>
           <div class="flex flex-col gap-2">
@@ -91,7 +112,9 @@ export default function BtopComponent(props: Props): JSX.Element {
           </div>
         </div>
 
-        <div class="box">
+        <Git />
+
+        <div class="box [grid-area:proc]">
           <span class="label">proc</span>
           <span class="hint">
             <Show
@@ -166,9 +189,47 @@ export default function BtopComponent(props: Props): JSX.Element {
   );
 }
 
+function Git(): JSX.Element {
+  const data = CONTRIBUTIONS;
+  // the calendar starts on a weekday; pad so rows line up with sun..sat
+  const pad = data ? new Date(data.days[0].date).getUTCDay() : 0;
+
+  return (
+    <div class="box [grid-area:git]">
+      <span class="label">git</span>
+      <span class="hint">
+        {data ? `${data.total} contributions, last year` : "no data"}
+      </span>
+      <Show
+        when={data}
+        fallback={<p class="text-dim">run npm run contributions</p>}
+      >
+        {(d) => (
+          <div
+            class="grid grid-flow-col grid-rows-7 auto-cols-fr gap-[2px]"
+            role="img"
+            aria-label={`${d().total} github contributions in the last year`}
+          >
+            <Index each={Array.from({ length: pad })}>{() => <span />}</Index>
+            <Index each={d().days}>
+              {(day) => (
+                <span
+                  class="aspect-square rounded-[1px]"
+                  style={{ background: LEVEL[day().level] }}
+                  title={`${day().count} on ${day().date}`}
+                />
+              )}
+            </Index>
+          </div>
+        )}
+      </Show>
+    </div>
+  );
+}
+
 function Info(props: { proc: () => Proc; cpu: () => number }): JSX.Element {
   return (
-    <div class="box" aria-live="polite">
+    <div class="box [grid-area:info]" aria-live="polite">
       <span class="label">info</span>
       <span class="hint">pid {props.proc().pid}</span>
       <h2 class="text-[15px] font-semibold mb-1">{props.proc().name}</h2>
