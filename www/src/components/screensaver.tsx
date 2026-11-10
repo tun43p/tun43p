@@ -12,6 +12,7 @@ export default function ScreensaverComponent(): JSX.Element {
     if (!ctx) return;
     const css = getComputedStyle(document.documentElement);
     const accent = css.getPropertyValue("--color-accent").trim();
+    const ink = css.getPropertyValue("--color-ink").trim();
     // ponytail: 1x canvas, the rain does not need retina sharpness
     canvas.width = innerWidth;
     canvas.height = innerHeight;
@@ -22,8 +23,11 @@ export default function ScreensaverComponent(): JSX.Element {
     );
 
     const timer = setInterval(() => {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+      // fade old glyphs into the theme background
+      ctx.globalAlpha = 0.08;
+      ctx.fillStyle = ink;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
       ctx.fillStyle = accent;
       drops.forEach((y, i) => {
         const glyph = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
@@ -38,7 +42,7 @@ export default function ScreensaverComponent(): JSX.Element {
   return (
     <canvas
       ref={canvas}
-      class="fixed inset-0 z-50 w-full h-full bg-black"
+      class="fixed inset-0 z-50 w-full h-full bg-ink"
       aria-hidden="true"
     />
   );
