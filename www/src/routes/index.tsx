@@ -102,7 +102,7 @@ const PROCS: Proc[] = [
   {
     pid: 64,
     name: "infra",
-    cmd: "homelab --docker --edge",
+    cmd: "cloud --docker --edge",
     user: "root",
     state: "R",
     threads: 5,
