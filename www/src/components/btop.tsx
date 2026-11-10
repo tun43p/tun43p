@@ -61,7 +61,7 @@ export default function BtopComponent(props: Props): JSX.Element {
   });
 
   return (
-    <section class="pane" aria-label="process monitor">
+    <section class="pane" data-pane="main" aria-label="process monitor">
       <header>btop</header>
       <div class="top">
         <div class="box [grid-area:cpu]">

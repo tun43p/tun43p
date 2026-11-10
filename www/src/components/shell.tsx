@@ -97,16 +97,22 @@ export default function ShellComponent(props: {
         return () => "";
       case "help":
         return () => (
-          <dl class="grid grid-cols-[12ch_1fr] gap-x-4">
-            <Index each={HELP}>
-              {(h) => (
-                <>
-                  <dt>{h()[0]}</dt>
-                  <dd class="text-ash">{h()[1]}</dd>
-                </>
-              )}
-            </Index>
-          </dl>
+          <div>
+            <dl class="grid grid-cols-[12ch_1fr] gap-x-4">
+              <Index each={HELP}>
+                {(h) => (
+                  <>
+                    <dt>{h()[0]}</dt>
+                    <dd class="text-ash">{h()[1]}</dd>
+                  </>
+                )}
+              </Index>
+            </dl>
+            <p class="mt-2 text-ash">
+              this is tmux too: <span class="text-bone">ctrl+b ?</span> lists
+              the key bindings
+            </p>
+          </div>
         );
       case "whoami":
         return () => <Card />;
@@ -255,10 +261,11 @@ export default function ShellComponent(props: {
   };
 
   return (
-    <section class="pane" aria-label="terminal">
+    <section class="pane" data-pane="shell" aria-label="terminal">
       <header>whoami</header>
       <div
         ref={screen}
+        data-screen
         class="px-5 py-4 flex flex-col gap-1.5 max-h-[70vh] min-[1100px]:h-[220px] overflow-y-auto"
         onClick={(e) => {
           const target = e.target as Element;

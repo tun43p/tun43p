@@ -76,7 +76,7 @@ export default function PagerComponent(props: {
   };
 
   return (
-    <section class="pane" aria-label={`pager: ${props.title}`}>
+    <section class="pane" data-pane="main" aria-label={`pager: ${props.title}`}>
       <header class="flex">
         <span>less {props.title}</span>
         <span class="ml-auto text-dim">q quit, j k space scroll, g G ends</span>

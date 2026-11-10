@@ -4,14 +4,56 @@ import Btop from "~/components/btop";
 import Pager from "~/components/pager";
 import Shell from "~/components/shell";
 import StatusBar from "~/components/status-bar";
+import {
+  EMAIL,
+  GITHUB_PROFILE_URL,
+  JOFNU_URL,
+  LINKEDIN_PROFILE_URL,
+} from "~/core/constants";
 import { PROCS } from "~/core/content";
 import { NOTES } from "~/core/notes";
 import BaseLayout from "~/layouts/base";
 
+type PaneId = "shell" | "main";
 type Page = { title: string; text: string };
+
+const WINDOWS = [
+  GITHUB_PROFILE_URL,
+  LINKEDIN_PROFILE_URL,
+  JOFNU_URL,
+  `mailto:${EMAIL}`,
+];
+
+const KEYS = `# tmux, prefix is ctrl+b
+
+C-b z      zoom the active pane
+C-b o      switch to the other pane
+C-b d      detach
+C-b 1-4    open github, linkedin, jofnu, mail
+C-b ?      this list
+
+# btop
+
+↑ ↓ j k    select a process
+t          terminate it, or try to
+enter      open its link
+
+# pager
+
+j k space  scroll
+g G        top, bottom
+q          quit`;
 
 const clamp = (v: number, lo = 0, hi = 1): number =>
   Math.min(hi, Math.max(lo, v));
+
+const paneOf = (target: EventTarget | null): PaneId | undefined => {
+  const id =
+    target instanceof Element
+      ? target.closest("[data-pane]")?.getAttribute("data-pane")
+      : undefined;
+  return id === "shell" || id === "main" ? id : undefined;
+};
 
 export default function HomeRoute(): JSX.Element {
   const [tick, setTick] = createSignal(0);
@@ -20,11 +62,36 @@ export default function HomeRoute(): JSX.Element {
   const [notice, setNotice] = createSignal("");
   const [started] = createSignal(Date.now());
   const [page, setPage] = createSignal<Page>();
+  const [active, setActive] = createSignal<PaneId>("main");
+  const [zoom, setZoom] = createSignal(false);
+  const [prefix, setPrefix] = createSignal(false);
+  const [message, setMessage] = createSignal("");
+  const [detached, setDetached] = createSignal(false);
   const samples: number[] = [];
   let touched = false;
+  let messageTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const flash = (text: string): void => {
+    clearTimeout(messageTimer);
+    setMessage(text);
+    messageTimer = setTimeout(() => setMessage(""), 2500);
+  };
 
   const openNote = (name: string): void => {
     setPage({ title: `notes/${name}.md`, text: NOTES[name] });
+    setActive("main");
+  };
+
+  const focusPane = (pane: PaneId): void => {
+    setActive(pane);
+    const target =
+      pane === "shell"
+        ? document.querySelector<HTMLElement>("[data-pane=shell] input")
+        : document.querySelector<HTMLElement>("[data-pager]");
+    if (target) target.focus();
+    else if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
   };
 
   onMount(() => {
@@ -69,6 +136,37 @@ export default function HomeRoute(): JSX.Element {
       lastMove = { x: e.clientX, y: e.clientY };
     };
 
+    // capture phase: tmux sees keys before the shell or btop do
+    const onTmux = (e: KeyboardEvent): void => {
+      if (detached()) {
+        e.preventDefault();
+        e.stopPropagation();
+        setDetached(false);
+        return;
+      }
+      if (e.ctrlKey && e.key === "b") {
+        e.preventDefault();
+        e.stopPropagation();
+        setPrefix(true);
+        return;
+      }
+      if (!prefix() || ["Control", "Shift", "Alt", "Meta"].includes(e.key)) {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      setPrefix(false);
+      const win = Number(e.key);
+      if (e.key === "z") setZoom((z) => !z);
+      else if (e.key === "o")
+        focusPane(active() === "shell" ? "main" : "shell");
+      else if (e.key === "?") setPage({ title: "list-keys", text: KEYS });
+      else if (e.key === "d") setDetached(true);
+      else if (win >= 1 && win <= WINDOWS.length) {
+        window.open(WINDOWS[win - 1], "_blank", "noopener");
+      } else if (e.key !== "Escape") flash(`unknown key: C-b ${e.key}`);
+    };
+
     const onKey = (e: KeyboardEvent): void => {
       activity = Math.min(0.5, activity + 0.08);
       if (e.target instanceof HTMLInputElement) return;
@@ -99,12 +197,15 @@ export default function HomeRoute(): JSX.Element {
     };
 
     window.addEventListener("pointermove", onMove);
+    window.addEventListener("keydown", onTmux, true);
     window.addEventListener("keydown", onKey);
     window.addEventListener("pointerdown", onDown);
     onCleanup(() => {
       clearInterval(timer);
       clearInterval(tour);
+      clearTimeout(messageTimer);
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("keydown", onTmux, true);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", onDown);
     });
@@ -115,7 +216,13 @@ export default function HomeRoute(): JSX.Element {
       title="Home"
       description="tun43p, independent developer running JOFNU. I build AI workflows, trading bots and automation."
     >
-      <div class="desk">
+      <div
+        class="desk"
+        data-active={active()}
+        data-zoom={zoom() ? active() : undefined}
+        onPointerDown={(e) => setActive(paneOf(e.target) ?? active())}
+        onFocusIn={(e) => setActive(paneOf(e.target) ?? active())}
+      >
         <Shell
           select={(i) => {
             touched = true;
@@ -147,8 +254,24 @@ export default function HomeRoute(): JSX.Element {
           )}
         </Show>
 
-        <StatusBar tick={tick} window={() => (page() ? "less" : "btop")} />
+        <StatusBar
+          tick={tick}
+          window={() => (page() ? "less" : "btop")}
+          prefix={prefix}
+          zoom={zoom}
+          message={message}
+        />
       </div>
+
+      <Show when={detached()}>
+        <div
+          class="fixed inset-0 z-50 bg-ink p-5 flex flex-col gap-2"
+          onPointerDown={() => setDetached(false)}
+        >
+          <p>[detached (from session tun43p)]</p>
+          <p class="text-ash">press any key to reattach</p>
+        </div>
+      </Show>
     </BaseLayout>
   );
 }
