@@ -1,4 +1,4 @@
-import { createMemo, JSX } from "solid-js";
+import { createMemo, JSX, Show } from "solid-js";
 
 import {
   EMAIL,
@@ -12,6 +12,9 @@ const pad = (n: number): string => String(n).padStart(2, "0");
 export default function StatusBarComponent(props: {
   tick: () => number;
   window: () => string;
+  prefix: () => boolean;
+  zoom: () => boolean;
+  message: () => string;
 }): JSX.Element {
   const now = createMemo(() => (props.tick(), new Date()));
   const stamp = (d: Date): string =>
@@ -21,8 +24,11 @@ export default function StatusBarComponent(props: {
   return (
     <nav class="bar" aria-label="links">
       <span class="px-2 hidden md:inline">[tun43p]</span>
+      <Show when={props.prefix()}>
+        <span class="px-1 bg-ink text-accent">^B</span>
+      </Show>
       <a href="/" aria-current="page" class="hidden md:inline">
-        0:{props.window()}*
+        0:{props.window()}*{props.zoom() ? "Z" : ""}
       </a>
       <a href={GITHUB_PROFILE_URL} {...ext}>
         1:github
@@ -34,9 +40,18 @@ export default function StatusBarComponent(props: {
         3:jofnu
       </a>
       <a href={`mailto:${EMAIL}`}>4:mail</a>
-      <span class="ml-auto px-2 hidden md:inline">
-        "tun43p.com" {stamp(now())}
-      </span>
+      <Show
+        when={props.message()}
+        fallback={
+          <span class="ml-auto px-2 hidden md:inline">
+            "tun43p.com" {stamp(now())}
+          </span>
+        }
+      >
+        <span class="ml-auto px-2 bg-warn text-ink" role="status">
+          {props.message()}
+        </span>
+      </Show>
     </nav>
   );
 }
