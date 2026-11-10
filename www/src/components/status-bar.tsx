@@ -48,7 +48,7 @@ export default function StatusBarComponent(props: {
           </span>
         }
       >
-        <span class="ml-auto px-2 bg-warn text-ink" role="status">
+        <span class="ml-auto px-2 bg-warn text-on-bar" role="status">
           {props.message()}
         </span>
       </Show>

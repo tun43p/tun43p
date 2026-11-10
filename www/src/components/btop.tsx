@@ -282,17 +282,18 @@ function Graph(props: { tick: () => number; samples: number[] }): JSX.Element {
   onMount(() => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    // live declaration: re-read on every draw so a theme switch shows up on the next tick
     const css = getComputedStyle(document.documentElement);
     const color = (n: string): string =>
       css.getPropertyValue(`--color-${n}`).trim();
-    const C = {
-      accent: color("accent"),
-      warn: color("warn"),
-      hot: color("hot"),
-      rule: color("rule"),
-    };
 
     const draw = (): void => {
+      const C = {
+        accent: color("accent"),
+        warn: color("warn"),
+        hot: color("hot"),
+        rule: color("rule"),
+      };
       const dpr = devicePixelRatio || 1;
       const W = canvas.clientWidth;
       const H = canvas.clientHeight;

@@ -38,7 +38,7 @@ export default function ScreensaverComponent(): JSX.Element {
   return (
     <canvas
       ref={canvas}
-      class="fixed inset-0 z-50 w-full h-full bg-ink"
+      class="fixed inset-0 z-50 w-full h-full bg-black"
       aria-hidden="true"
     />
   );

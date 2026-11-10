@@ -3,6 +3,7 @@ import { createSignal, Index, JSX, Show } from "solid-js";
 import { EMAIL, JOFNU_URL } from "~/core/constants";
 import { LINKS, PROCS, STATE } from "~/core/content";
 import { NOTES } from "~/core/notes";
+import { applyTheme, currentTheme, type Theme, THEMES } from "~/core/theme";
 
 const HELP: [string, string][] = [
   ["help", "this list"],
@@ -14,6 +15,7 @@ const HELP: [string, string][] = [
   ["cowsay <text>", "let the cow say it"],
   ["sl", "for when you mistype ls"],
   ["open <link>", Object.keys(LINKS).join(", ")],
+  ["theme <mode>", THEMES.join(", ")],
   ["clear", "clear the screen"],
 ];
 
@@ -31,6 +33,7 @@ const ARGS: Record<string, string[]> = {
   open: Object.keys(LINKS),
   less: Object.keys(NOTES),
   ls: ["notes"],
+  theme: THEMES,
 };
 
 const TRAIN = `      _______
@@ -220,6 +223,17 @@ export default function ShellComponent(props: {
         }
         window.open(href, "_blank", "noopener");
         return () => `opening ${arg}`;
+      }
+      case "theme": {
+        if (arg === "") {
+          return () =>
+            `theme: ${currentTheme()}, try theme ${THEMES.join(", ")}`;
+        }
+        if (!THEMES.includes(arg as Theme)) {
+          return () => `theme: ${arg}: unknown, try ${THEMES.join(", ")}`;
+        }
+        applyTheme(arg as Theme);
+        return () => `theme set to ${arg}`;
       }
       case "kill":
         return () =>
