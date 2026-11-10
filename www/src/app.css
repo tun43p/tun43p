@@ -216,3 +216,17 @@ a:hover {
     animation: none;
   }
 }
+
+/* the block caret stands in for the native one until the prompt gets focus */
+.prompt:focus-within .caret {
+  display: none;
+}
+
+.prompt:focus-within input {
+  margin-left: 1ch;
+}
+
+/* the native caret already shows focus; an outline box would break the terminal look */
+.prompt input:focus-visible {
+  outline: none;
+}
