@@ -11,17 +11,20 @@ const HELP: [string, string][] = [
   ["cat <name>", "details about one of them"],
   ["less <note>", "read a note"],
   ["ps", "the process table"],
+  ["neofetch", "system info"],
   ["open <link>", Object.keys(LINKS).join(", ")],
   ["clear", "clear the screen"],
 ];
 
-// kill, sudo, echo and exit work too, they are just not advertised
+// a few more work, they are just not advertised
 const COMMANDS = [
   ...HELP.map(([c]) => c.split(" ")[0]),
   "kill",
   "sudo",
   "echo",
   "exit",
+  "cowsay",
+  "sl",
 ];
 
 const ARGS: Record<string, string[]> = {
@@ -30,6 +33,45 @@ const ARGS: Record<string, string[]> = {
   less: Object.keys(NOTES),
   ls: ["notes"],
 };
+
+const LOGO = `████████ ██   ██ ██████
+   ██    ██   ██      ██
+   ██    ███████  █████
+   ██         ██      ██
+   ██         ██ ██████`;
+
+const TRAIN = `      _______
+ ____|  |__  |________    __________    __________
+|  tun43p express     |==|  []  []  |==|  []  []  |
+|_____________________|  |__________|  |__________|
+  (o)(o)       (o)(o)      (o)  (o)      (o)  (o)`;
+
+const COW = `        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`;
+
+const PALETTE = ["ink", "hot", "accent", "warn", "ash", "dim", "rule", "bone"];
+
+const uptime = (): string => {
+  const s = Math.floor(performance.now() / 1000);
+  return s < 60 ? `${s} secs` : `${Math.floor(s / 60)} mins`;
+};
+
+const browser = (): string => {
+  const ua = navigator.userAgent;
+  if (ua.includes("Firefox/")) return "firefox";
+  if (ua.includes("Edg/")) return "edge";
+  if (ua.includes("Chrome/")) return "chrome";
+  if (ua.includes("Safari/")) return "safari";
+  return "something exotic";
+};
+
+function cowsay(text: string): string {
+  const t = (text || "moo").slice(0, 60);
+  return ` ${"_".repeat(t.length + 2)}\n< ${t} >\n ${"-".repeat(t.length + 2)}\n${COW}`;
+}
 
 type Entry = { cmd: string; out: () => JSX.Element };
 
@@ -146,6 +188,56 @@ export default function ShellComponent(props: {
         props.openNote(name);
         return () => `opened notes/${name}.md, q to close it`;
       }
+      case "neofetch": {
+        const rows: [string, string][] = [
+          ["os", "tun43p.com"],
+          ["host", "cloudflare edge"],
+          ["kernel", "solid-js"],
+          ["uptime", uptime()],
+          ["shell", "zsh, sort of"],
+          ["resolution", `${innerWidth}x${innerHeight}`],
+          ["terminal", browser()],
+          ["cpu", "1 human @ coffee"],
+          ["memory", "ai workflows, trading bots, automation"],
+        ];
+        return () => (
+          <div class="flex flex-wrap gap-x-8 gap-y-3 py-1">
+            <pre class="text-accent leading-none">{LOGO}</pre>
+            <div>
+              <p>
+                <span class="text-accent">tun43p</span>@
+                <span class="text-accent">jofnu</span>
+              </p>
+              <p class="text-dim">-----------</p>
+              <Index each={rows}>
+                {(r) => (
+                  <p>
+                    <span class="text-accent">{r()[0]}</span>: {r()[1]}
+                  </p>
+                )}
+              </Index>
+              <p class="flex mt-2">
+                <Index each={PALETTE}>
+                  {(c) => (
+                    <span
+                      class="w-[3ch] h-[1.2em]"
+                      style={{ background: `var(--color-${c()})` }}
+                    />
+                  )}
+                </Index>
+              </p>
+            </div>
+          </div>
+        );
+      }
+      case "cowsay":
+        return () => <pre>{cowsay(arg)}</pre>;
+      case "sl":
+        return () => (
+          <div class="overflow-hidden">
+            <pre class="sl w-max">{TRAIN}</pre>
+          </div>
+        );
       case "cat": {
         if (arg.startsWith("notes/")) return run(`less ${arg}`);
         const i = PROCS.findIndex((p) => p.name === arg);

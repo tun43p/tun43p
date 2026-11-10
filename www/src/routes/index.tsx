@@ -2,6 +2,7 @@ import { createSignal, JSX, onCleanup, onMount, Show } from "solid-js";
 
 import Btop from "~/components/btop";
 import Pager from "~/components/pager";
+import Screensaver from "~/components/screensaver";
 import Shell from "~/components/shell";
 import StatusBar from "~/components/status-bar";
 import {
@@ -17,6 +18,7 @@ import BaseLayout from "~/layouts/base";
 type PaneId = "shell" | "main";
 type Page = { title: string; text: string };
 
+const IDLE_MS = 60_000;
 const WINDOWS = [
   GITHUB_PROFILE_URL,
   LINKEDIN_PROFILE_URL,
@@ -67,6 +69,7 @@ export default function HomeRoute(): JSX.Element {
   const [prefix, setPrefix] = createSignal(false);
   const [message, setMessage] = createSignal("");
   const [detached, setDetached] = createSignal(false);
+  const [idle, setIdle] = createSignal(false);
   const samples: number[] = [];
   let touched = false;
   let messageTimer: ReturnType<typeof setTimeout> | undefined;
@@ -99,6 +102,8 @@ export default function HomeRoute(): JSX.Element {
     let base = 0.3;
     let activity = 0;
     let lastMove: { x: number; y: number } | undefined;
+    let lastInput = Date.now();
+    const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const sample = (): number => {
       base = clamp(base + (Math.random() - 0.5) * 0.06, 0.3, 0.65);
@@ -128,7 +133,22 @@ export default function HomeRoute(): JSX.Element {
       if (!touched) setSel((s) => (s + 1) % PROCS.length);
     }, 6000);
 
+    const saver = setInterval(() => {
+      if (!calm && !detached() && Date.now() - lastInput > IDLE_MS) {
+        setIdle(true);
+      }
+    }, 5000);
+
+    // returns true when this input only woke the screen up
+    const wake = (): boolean => {
+      lastInput = Date.now();
+      if (!idle()) return false;
+      setIdle(false);
+      return true;
+    };
+
     const onMove = (e: PointerEvent): void => {
+      wake();
       if (lastMove) {
         const d = Math.hypot(e.clientX - lastMove.x, e.clientY - lastMove.y);
         activity = Math.min(0.5, activity + d / 4000);
@@ -138,7 +158,7 @@ export default function HomeRoute(): JSX.Element {
 
     // capture phase: tmux sees keys before the shell or btop do
     const onTmux = (e: KeyboardEvent): void => {
-      if (detached()) {
+      if (wake() || detached()) {
         e.preventDefault();
         e.stopPropagation();
         setDetached(false);
@@ -193,6 +213,7 @@ export default function HomeRoute(): JSX.Element {
     };
 
     const onDown = (): void => {
+      wake();
       touched = true;
     };
 
@@ -200,14 +221,17 @@ export default function HomeRoute(): JSX.Element {
     window.addEventListener("keydown", onTmux, true);
     window.addEventListener("keydown", onKey);
     window.addEventListener("pointerdown", onDown);
+    window.addEventListener("wheel", wake);
     onCleanup(() => {
       clearInterval(timer);
       clearInterval(tour);
+      clearInterval(saver);
       clearTimeout(messageTimer);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("keydown", onTmux, true);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("wheel", wake);
     });
   });
 
@@ -271,6 +295,10 @@ export default function HomeRoute(): JSX.Element {
           <p>[detached (from session tun43p)]</p>
           <p class="text-ash">press any key to reattach</p>
         </div>
+      </Show>
+
+      <Show when={idle()}>
+        <Screensaver />
       </Show>
     </BaseLayout>
   );

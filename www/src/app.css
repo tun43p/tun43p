@@ -259,3 +259,23 @@ a:hover {
 .prompt input:focus-visible {
   outline: none;
 }
+
+/* sl: the train crosses the shell pane once */
+.sl {
+  animation: sl 5s linear forwards;
+}
+
+@keyframes sl {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sl {
+    animation: none;
+  }
+}
