@@ -13,6 +13,7 @@ import {
 } from "~/core/constants";
 import { PROCS } from "~/core/content";
 import { NOTES } from "~/core/notes";
+import { watchSystemTheme } from "~/core/theme";
 import BaseLayout from "~/layouts/base";
 
 type PaneId = "shell" | "main";
@@ -217,12 +218,14 @@ export default function HomeRoute(): JSX.Element {
       touched = true;
     };
 
+    const unwatchTheme = watchSystemTheme();
     window.addEventListener("pointermove", onMove);
     window.addEventListener("keydown", onTmux, true);
     window.addEventListener("keydown", onKey);
     window.addEventListener("pointerdown", onDown);
     window.addEventListener("wheel", wake);
     onCleanup(() => {
+      unwatchTheme();
       clearInterval(timer);
       clearInterval(tour);
       clearInterval(saver);

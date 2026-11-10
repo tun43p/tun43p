@@ -1,6 +1,9 @@
 // @refresh reload
 import { createHandler, StartServer } from "@solidjs/start/server";
 
+// runs before first paint so the stored theme never flashes; mirrors core/theme.ts
+const THEME_SCRIPT = `try{var t=localStorage.getItem("theme");document.documentElement.dataset.theme=t==="light"||t==="dark"?t:matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){}`;
+
 export default createHandler(() => (
   <StartServer
     document={({ assets, children, scripts }) => (
@@ -18,6 +21,7 @@ export default createHandler(() => (
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Martian+Mono:wdth,wght@75..112.5,100..800&display=swap"
           />
+          <script innerHTML={THEME_SCRIPT} />
           {assets}
         </head>
         <body>

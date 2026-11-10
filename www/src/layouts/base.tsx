@@ -17,7 +17,16 @@ export default function BaseLayout({
   return (
     <main>
       <Meta name="viewport" content="width=device-width, initial-scale=1" />
-      <Meta name="theme-color" content="#000000" />
+      <Meta
+        name="theme-color"
+        content="#000000"
+        media="(prefers-color-scheme: dark)"
+      />
+      <Meta
+        name="theme-color"
+        content="#fbfbf8"
+        media="(prefers-color-scheme: light)"
+      />
 
       <Title>{title.toLocaleLowerCase()} | tun43p</Title>
       <Meta name="og:title" content={title} />

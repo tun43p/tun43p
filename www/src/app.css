@@ -10,7 +10,22 @@
   --color-accent: #43e3b3;
   --color-warn: #f5c344;
   --color-hot: #ff5c39;
+  --color-bar: #43e3b3;
+  --color-on-bar: #000;
   --font-mono: "Martian Mono", ui-monospace, Menlo, monospace;
+}
+
+/* light palette: darker accent and hot so text keeps 4.5:1 on the light background;
+   the tmux bar stays bright green with black text in both themes */
+:root[data-theme="light"] {
+  --color-ink: #fbfbf8;
+  --color-bone: #1d1d1b;
+  --color-ash: #6b6964;
+  --color-dim: #9a978f;
+  --color-rule: #e3e2dd;
+  --color-accent: #08785a;
+  --color-warn: #e0a800;
+  --color-hot: #d23d1c;
 }
 
 html,
@@ -120,8 +135,8 @@ a:hover {
   align-items: center;
   white-space: nowrap;
   overflow: hidden;
-  background: var(--color-accent);
-  color: var(--color-ink);
+  background: var(--color-bar);
+  color: var(--color-on-bar);
 }
 
 @media (min-width: 1100px) {
@@ -142,7 +157,7 @@ a:hover {
 }
 
 .bar :focus-visible {
-  outline-color: var(--color-ink);
+  outline-color: var(--color-on-bar);
   outline-offset: -2px;
 }
 
