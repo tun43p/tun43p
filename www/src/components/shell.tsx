@@ -11,20 +11,19 @@ const HELP: [string, string][] = [
   ["cat <name>", "details about one of them"],
   ["less <note>", "read a note"],
   ["ps", "the process table"],
-  ["neofetch", "system info"],
+  ["cowsay <text>", "let the cow say it"],
+  ["sl", "for when you mistype ls"],
   ["open <link>", Object.keys(LINKS).join(", ")],
   ["clear", "clear the screen"],
 ];
 
-// a few more work, they are just not advertised
+// kill, sudo, echo and exit work too, they are just not advertised
 const COMMANDS = [
   ...HELP.map(([c]) => c.split(" ")[0]),
   "kill",
   "sudo",
   "echo",
   "exit",
-  "cowsay",
-  "sl",
 ];
 
 const ARGS: Record<string, string[]> = {
@@ -33,12 +32,6 @@ const ARGS: Record<string, string[]> = {
   less: Object.keys(NOTES),
   ls: ["notes"],
 };
-
-const LOGO = `████████ ██   ██ ██████
-   ██    ██   ██      ██
-   ██    ███████  █████
-   ██         ██      ██
-   ██         ██ ██████`;
 
 const TRAIN = `      _______
  ____|  |__  |________    __________    __________
@@ -51,22 +44,6 @@ const COW = `        \\   ^__^
             (__)\\       )\\/\\
                 ||----w |
                 ||     ||`;
-
-const PALETTE = ["ink", "hot", "accent", "warn", "ash", "dim", "rule", "bone"];
-
-const uptime = (): string => {
-  const s = Math.floor(performance.now() / 1000);
-  return s < 60 ? `${s} secs` : `${Math.floor(s / 60)} mins`;
-};
-
-const browser = (): string => {
-  const ua = navigator.userAgent;
-  if (ua.includes("Firefox/")) return "firefox";
-  if (ua.includes("Edg/")) return "edge";
-  if (ua.includes("Chrome/")) return "chrome";
-  if (ua.includes("Safari/")) return "safari";
-  return "something exotic";
-};
 
 function cowsay(text: string): string {
   const t = (text || "moo").slice(0, 60);
@@ -140,7 +117,7 @@ export default function ShellComponent(props: {
       case "help":
         return () => (
           <div>
-            <dl class="grid grid-cols-[12ch_1fr] gap-x-4">
+            <dl class="grid grid-cols-[14ch_1fr] gap-x-4">
               <Index each={HELP}>
                 {(h) => (
                   <>
@@ -187,48 +164,6 @@ export default function ShellComponent(props: {
         }
         props.openNote(name);
         return () => `opened notes/${name}.md, q to close it`;
-      }
-      case "neofetch": {
-        const rows: [string, string][] = [
-          ["os", "tun43p.com"],
-          ["host", "cloudflare edge"],
-          ["kernel", "solid-js"],
-          ["uptime", uptime()],
-          ["shell", "zsh, sort of"],
-          ["resolution", `${innerWidth}x${innerHeight}`],
-          ["terminal", browser()],
-          ["cpu", "1 human @ coffee"],
-          ["memory", "ai workflows, trading bots, automation"],
-        ];
-        return () => (
-          <div class="flex flex-wrap gap-x-8 gap-y-3 py-1">
-            <pre class="text-accent leading-none">{LOGO}</pre>
-            <div>
-              <p>
-                <span class="text-accent">tun43p</span>@
-                <span class="text-accent">jofnu</span>
-              </p>
-              <p class="text-dim">-----------</p>
-              <Index each={rows}>
-                {(r) => (
-                  <p>
-                    <span class="text-accent">{r()[0]}</span>: {r()[1]}
-                  </p>
-                )}
-              </Index>
-              <p class="flex mt-2">
-                <Index each={PALETTE}>
-                  {(c) => (
-                    <span
-                      class="w-[3ch] h-[1.2em]"
-                      style={{ background: `var(--color-${c()})` }}
-                    />
-                  )}
-                </Index>
-              </p>
-            </div>
-          </div>
-        );
       }
       case "cowsay":
         return () => <pre>{cowsay(arg)}</pre>;
