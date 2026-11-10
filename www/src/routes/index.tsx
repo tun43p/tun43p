@@ -43,17 +43,6 @@ export default function HomeRoute(): JSX.Element {
             url: `${GITHUB_PROFILE_URL}/tun43p`,
           },
           {
-            name: "golang-crypto-toolbox",
-            description:
-              "a massive crypto toolbox that can be used to trade or do some analysis.",
-            url: `${GITHUB_PROFILE_URL}/golang-crypto-toolbox`,
-          },
-          {
-            name: "python-uniswap-trading-bot",
-            description: "a simple trading bot for uniswap written in python.",
-            url: `${GITHUB_PROFILE_URL}/python-uniswap-trading-bot`,
-          },
-          {
             name: "url-shortener",
             description: "a simple url shortener written in go.",
             url: `${GITHUB_PROFILE_URL}/url-shortener`,
