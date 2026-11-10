@@ -1,10 +1,14 @@
-import { createSignal, JSX, onCleanup, onMount } from "solid-js";
+import { createSignal, JSX, onCleanup, onMount, Show } from "solid-js";
 
 import Btop from "~/components/btop";
+import Pager from "~/components/pager";
 import Shell from "~/components/shell";
 import StatusBar from "~/components/status-bar";
 import { PROCS } from "~/core/content";
+import { NOTES } from "~/core/notes";
 import BaseLayout from "~/layouts/base";
+
+type Page = { title: string; text: string };
 
 const clamp = (v: number, lo = 0, hi = 1): number =>
   Math.min(hi, Math.max(lo, v));
@@ -15,14 +19,20 @@ export default function HomeRoute(): JSX.Element {
   const [sel, setSel] = createSignal(1);
   const [notice, setNotice] = createSignal("");
   const [started] = createSignal(Date.now());
+  const [page, setPage] = createSignal<Page>();
   const samples: number[] = [];
   let touched = false;
+
+  const openNote = (name: string): void => {
+    setPage({ title: `notes/${name}.md`, text: NOTES[name] });
+  };
 
   onMount(() => {
     // fake load = slow random walk + whatever the visitor is doing right now
     let base = 0.3;
     let activity = 0;
     let lastMove: { x: number; y: number } | undefined;
+
     const sample = (): number => {
       base = clamp(base + (Math.random() - 0.5) * 0.06, 0.3, 0.65);
       activity *= 0.92;
@@ -58,9 +68,13 @@ export default function HomeRoute(): JSX.Element {
       }
       lastMove = { x: e.clientX, y: e.clientY };
     };
+
     const onKey = (e: KeyboardEvent): void => {
       activity = Math.min(0.5, activity + 0.08);
       if (e.target instanceof HTMLInputElement) return;
+      if (e.target instanceof Element && e.target.closest("[data-pager]")) {
+        return;
+      }
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const move = { ArrowDown: 1, j: 1, ArrowUp: -1, k: -1 }[e.key];
       if (move !== undefined) {
@@ -79,6 +93,7 @@ export default function HomeRoute(): JSX.Element {
         if (link) window.open(link.href, "_blank", "noopener");
       }
     };
+
     const onDown = (): void => {
       touched = true;
     };
@@ -106,19 +121,33 @@ export default function HomeRoute(): JSX.Element {
             touched = true;
             setSel(i);
           }}
+          openNote={openNote}
         />
 
-        <Btop
-          tick={tick}
-          cpu={cpu}
-          samples={samples}
-          sel={sel}
-          select={setSel}
-          notice={notice}
-          started={started}
-        />
+        <Show
+          when={page()}
+          fallback={
+            <Btop
+              tick={tick}
+              cpu={cpu}
+              samples={samples}
+              sel={sel}
+              select={setSel}
+              notice={notice}
+              started={started}
+            />
+          }
+        >
+          {(p) => (
+            <Pager
+              title={p().title}
+              text={p().text}
+              onClose={() => setPage(undefined)}
+            />
+          )}
+        </Show>
 
-        <StatusBar tick={tick} />
+        <StatusBar tick={tick} window={() => (page() ? "less" : "btop")} />
       </div>
     </BaseLayout>
   );

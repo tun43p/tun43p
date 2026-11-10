@@ -9,5 +9,7 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    // notes/ lives at the repo root, one level above the app
+    server: { fs: { allow: [".."] } },
   },
 });

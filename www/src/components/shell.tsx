@@ -2,12 +2,14 @@ import { createSignal, Index, JSX, Show } from "solid-js";
 
 import { EMAIL, JOFNU_URL } from "~/core/constants";
 import { LINKS, PROCS, STATE } from "~/core/content";
+import { NOTES } from "~/core/notes";
 
 const HELP: [string, string][] = [
   ["help", "this list"],
   ["whoami", "who runs this machine"],
-  ["ls", "what i work on"],
+  ["ls", "what i work on, and my notes"],
   ["cat <name>", "details about one of them"],
+  ["less <note>", "read a note"],
   ["ps", "the process table"],
   ["open <link>", Object.keys(LINKS).join(", ")],
   ["clear", "clear the screen"],
@@ -21,6 +23,13 @@ const COMMANDS = [
   "echo",
   "exit",
 ];
+
+const ARGS: Record<string, string[]> = {
+  cat: PROCS.map((p) => p.name),
+  open: Object.keys(LINKS),
+  less: Object.keys(NOTES),
+  ls: ["notes"],
+};
 
 type Entry = { cmd: string; out: () => JSX.Element };
 
@@ -68,6 +77,7 @@ function Prompt(props: { children?: JSX.Element }): JSX.Element {
 
 export default function ShellComponent(props: {
   select: (_i: number) => void;
+  openNote: (_name: string) => void;
 }): JSX.Element {
   const [entries, setEntries] = createSignal<Entry[]>([
     { cmd: "whoami", out: (): JSX.Element => <Card main /> },
@@ -101,14 +111,37 @@ export default function ShellComponent(props: {
       case "whoami":
         return () => <Card />;
       case "ls":
+        if (arg === "notes" || arg === "notes/") {
+          return () => (
+            <p class="flex flex-wrap gap-x-[2ch]">
+              <Index each={Object.keys(NOTES)}>
+                {(n) => <span>{n()}</span>}
+              </Index>
+            </p>
+          );
+        }
+        if (arg) return () => `ls: ${arg}: no such file or directory`;
         return () => (
           <p class="flex flex-wrap gap-x-[2ch]">
             <Index each={PROCS}>
               {(p) => <span class={STATE[p().state][1]}>{p().name}</span>}
             </Index>
+            <span class="font-bold">notes/</span>
           </p>
         );
+      case "less": {
+        const name = arg.replace(/^notes\//, "").replace(/\.md$/, "");
+        if (!(name in NOTES)) {
+          return () =>
+            arg
+              ? `less: ${arg}: no such file or directory`
+              : "less: missing file, try ls notes";
+        }
+        props.openNote(name);
+        return () => `opened notes/${name}.md, q to close it`;
+      }
       case "cat": {
+        if (arg.startsWith("notes/")) return run(`less ${arg}`);
         const i = PROCS.findIndex((p) => p.name === arg);
         if (i < 0) {
           return () =>
@@ -189,14 +222,7 @@ export default function ShellComponent(props: {
 
   const complete = (): void => {
     const parts = value().split(" ");
-    const pool =
-      parts.length === 1
-        ? COMMANDS
-        : parts[0] === "cat"
-          ? PROCS.map((p) => p.name)
-          : parts[0] === "open"
-            ? Object.keys(LINKS)
-            : [];
+    const pool = parts.length === 1 ? COMMANDS : (ARGS[parts[0]] ?? []);
     const hits = pool.filter((c) => c.startsWith(parts[parts.length - 1]));
     if (hits.length === 1) {
       parts[parts.length - 1] = hits[0];
