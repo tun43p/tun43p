@@ -294,12 +294,15 @@ export default function HomeRoute(): JSX.Element {
           <div class="top">
             <div class="box">
               <span class="label">cpu</span>
-              <span class="hint">1 human, {running()} busy cores</span>
+              <span class="hint">
+                1 human, {running()} busy cores, up{" "}
+                {(tick(), duration(Date.now() - started()))}
+              </span>
               <div class="flex flex-1 min-h-0 gap-5">
                 <div class="relative flex-1 min-w-0">
                   <Graph tick={tick} samples={samples} />
                 </div>
-                <div class="hidden sm:flex flex-col gap-1.5 w-72 shrink-0">
+                <div class="hidden sm:flex flex-col gap-1 w-72 shrink-0 overflow-hidden">
                   <Index
                     each={PROCS.filter((p) => p.state === "R").slice(0, 6)}
                   >
@@ -316,12 +319,6 @@ export default function HomeRoute(): JSX.Element {
                   </Index>
                   <div class="mt-auto text-ash">
                     load avg <span class="text-bone">{load()}</span>
-                  </div>
-                  <div class="text-ash">
-                    up{" "}
-                    <span class="text-bone">
-                      {(tick(), duration(Date.now() - started()))}
-                    </span>
                   </div>
                 </div>
               </div>
