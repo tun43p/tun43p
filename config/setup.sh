@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-DOTFILES="$HOME/Documents/Forge/src/github.com/tun43p/dotfiles"
+DOTFILES="$HOME/Documents/Forge/src/github.com/tun43p/tun43p/config"
 
 typeset -A links=(
     "$HOME/.claude" "claude"
