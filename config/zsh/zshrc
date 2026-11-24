@@ -1,0 +1,149 @@
+#!/usr/bin/env zsh
+
+# Homebrew (macOS) — must come before compinit so its completions are found
+if [[ -d "/opt/homebrew" ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    FPATH="/opt/homebrew/share/zsh/site-functions:$FPATH"
+fi
+
+# Enable programmable completion
+autoload -Uz compinit
+compinit
+
+# History
+HISTFILE=~/.zsh_history
+HISTSIZE=100000
+SAVEHIST=200000
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_REDUCE_BLANKS
+setopt APPEND_HISTORY
+
+# Shell options
+setopt EXTENDED_GLOB
+setopt NO_CASE_GLOB
+setopt AUTO_CD
+setopt CORRECT
+
+# Source prompt setup
+source "$DOTS/zsh/zprompt"
+
+# pyenv — Python version manager
+if [[ -o interactive ]] && command -v pyenv &>/dev/null; then
+    eval "$(pyenv init - zsh)"
+fi
+
+# fnm — Node version manager
+if command -v fnm &>/dev/null; then
+    eval "$(fnm env --use-on-cd --shell zsh)"
+fi
+
+# zoxide — smarter cd
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init zsh)"
+fi
+
+# ls aliases (eza)
+alias ls='eza --icons=auto'
+alias ll='eza -lh --icons=auto --git'
+alias la='eza -Ah --icons=auto --git'
+alias l='eza -lbF --icons=auto --git'
+alias lt='eza --tree --icons=auto'
+alias lla='eza -lahg --icons=auto --git'
+
+# Safety nets aliases
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# Alias trash cli
+alias del="trash"
+
+# Terraform aliases
+alias tf="terraform"
+
+# Go to work directories
+alias etc="cd $HOME/Documents/Forge/etc"
+alias src="cd $HOME/Documents/Forge/src"
+alias cloud="cd '$ICLOUD_DRIVE'/Documents"
+
+# Reload zsh alias
+alias reload='exec zsh'
+
+# Override vim alias
+alias vim='nvim'
+
+# Edit directories with neovim
+alias dots="nvim $DOTS"
+alias wiki="nvim $HOME/.wiki"
+
+# macOS specific aliases
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias finder='open -R'
+    alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+fi
+
+# Create directory and cd into it
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Extract various archive formats
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *)           echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# Find process using a port
+port() {
+    lsof -i :"$1"
+}
+
+# fzf — fuzzy finder keybindings (Ctrl+R: history, Ctrl+T: files, Alt+C: cd)
+if [[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]]; then
+    source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+fi
+
+# fzf — shell completions (trigger: <cmd> **)
+if [[ -f /opt/homebrew/opt/fzf/shell/completion.zsh ]]; then
+    source /opt/homebrew/opt/fzf/shell/completion.zsh
+fi
+
+# fzf default options
+export FZF_DEFAULT_OPTS='--height=40% --layout=reverse --border=rounded --info=inline'
+
+# Use fd if available (respects .gitignore, faster than find)
+if command -v fd &>/dev/null; then
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+fi
+
+# zsh-autosuggestions (must be sourced before syntax-highlighting)
+if [[ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+# zsh-syntax-highlighting (must be sourced last)
+if [[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+[ -s "/Users/tun43p/.bun/_bun" ] && source "/Users/tun43p/.bun/_bun"

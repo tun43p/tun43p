@@ -1,0 +1,119 @@
+-- set <space> as the leader key
+vim.g.mapleader = " "
+vim.g.maplocalleader = "  "
+
+-- use the terminal's 16-color palette (theme lives in the terminal only)
+vim.o.termguicolors = false
+
+-- follow terminal light/dark switches: nvim only asks the terminal for its background
+-- color (OSC 11) at startup, so re-ask every 3s; the built-in TermResponse handler
+-- then updates 'background' (setting the same value is a no-op for highlights)
+vim.uv.new_timer():start(3000, 3000, vim.schedule_wrap(function()
+	vim.api.nvim_ui_send("\027]11;?\007")
+end))
+
+-- set highlight on search
+vim.o.hlsearch = true
+
+-- show line numbers
+vim.wo.number = true
+vim.wo.relativenumber = true
+
+-- keep signcolumn on by default
+vim.wo.signcolumn = "yes"
+
+-- sync clipboard between os and neovim
+vim.o.clipboard = "unnamedplus"
+
+-- enable break indent
+vim.o.breakindent = true
+
+-- disable backup or swap files
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.swapfile = false
+
+-- save undo history
+vim.o.undofile = true
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+
+-- case sensitive searching unless \C or capital in search
+vim.o.ignorecase = true
+vim.o.smartcase = true
+
+-- dicrease update time
+vim.o.updatetime = 250
+vim.o.ttimeoutlen = 0
+
+-- set completeopt to have a better completion experience
+vim.o.completeopt = "menuone,noselect"
+
+-- don't show modes
+vim.opt.showmode = false
+
+-- hide cmdline when not in use (noice handles it via popup)
+vim.opt.cmdheight = 0
+
+-- open splits on the right and below
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+
+-- indentation
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+vim.opt.smarttab = true
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
+
+-- always use spaces instead of tabes
+vim.opt.expandtab = true
+
+-- enable code wrap and
+
+-- setup line breaks
+vim.opt.wrap = true
+vim.opt.linebreak = true
+vim.opt.showbreak = "↳"
+
+-- start scrolling when we are 8 lines aways from borders
+vim.opt.scrolloff = 8
+vim.opt.sidescrolloff = 15
+vim.opt.sidescroll = 5
+
+-- disable netrw
+vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_netrw = 1
+
+-- disable unused providers
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_python3_provider = 0
+
+-- auto enter terminal mode when switching to a terminal buffer
+vim.api.nvim_create_autocmd({ "BufEnter", "TermOpen" }, {
+	pattern = "term://*",
+	callback = function()
+		vim.cmd("startinsert")
+		vim.opt_local.winbar = ""
+	end,
+})
+
+-- change cwd to the argument passed to nvim (e.g. `nvim $DOTS`)
+vim.api.nvim_create_autocmd("VimEnter", {
+	callback = function()
+		local arg = vim.fn.argv(0)
+		if arg ~= "" and vim.fn.isdirectory(arg) == 1 then
+			vim.cmd("cd " .. vim.fn.fnameescape(arg))
+		end
+	end,
+})
+
+-- colorcolumn at 80 for files
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	pattern = { "markdown", "javascript", "javascriptreact", "typescript", "typescriptreact" },
+-- 	callback = function()
+-- 		vim.opt_local.colorcolumn = "80"
+-- 	end,
+-- })

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Usage: ff <pattern> [path]
+# Find files or an occurence in files 
+
+set -e
+if [ -z "$1" ]; then
+    echo "Usage: ff <pattern> [path] --rg" >&2
+    exit 1
+fi
+
+if ! command -v rg >/dev/null 2>&1; then
+    echo "ff: ripgrep (rg) is required" >&2
+    exit 1
+fi
+
+echo "Find $1 file names"
+find ${2:-.} \( -name "*$1*" -o -name ".$1*" \)
+
+echo "\nFind $1 occurence in files"
+rg --hidden --smart-case --line-number --color=auto "$1" "${2:-.}"

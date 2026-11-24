@@ -1,0 +1,40 @@
+[core]
+	editor = nvim 
+  hooksPath = "~/Documents/Forge/src/github.com/tun43p/dotfiles/git/hooks"
+
+[init]
+	defaultBranch = main
+
+[push]
+	autoSetupRemote = true
+
+[pull]
+  rebase = false
+
+[gpg]
+  program = /opt/homebrew/bin/gpg
+
+[commit]
+	gpgSign = true
+
+[tag]
+	gpgSign = true
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[includeIf "gitdir:~/Documents/Forge/src/localhost/"]
+	path = "~/Documents/Forge/src/github.com/tun43p/dotfiles/git/conf.d/default"
+
+[includeIf "gitdir:~/Documents/Forge/src/github.com/"]
+	path = "~/Documents/Forge/src/github.com/tun43p/dotfiles/git/conf.d/default"
+
+[includeIf "gitdir:~/Documents/Forge/src/gitlab.com/"]
+	path = "~/Documents/Forge/src/github.com/tun43p/dotfiles/git/conf.d/default"
+
+[includeIf "gitdir:~/Documents/Forge/src/gitlab.innolab.fr/"]
+	path = "~/Documents/Forge/src/github.com/tun43p/dotfiles/git/conf.d/bouyguestelecom"
+

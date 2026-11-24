@@ -1,0 +1,89 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "attribution": {
+    "sessionUrl": false
+  },
+  "model": "opus[1m]",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/tun43p/.claude/scripts/notify.sh done"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/tun43p/.claude/scripts/notify.sh permission"
+          }
+        ]
+      },
+      {
+        "matcher": "elicitation_dialog",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/tun43p/.claude/scripts/notify.sh question"
+          }
+        ]
+      },
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/tun43p/.claude/scripts/notify.sh idle"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bun x ccusage statusline --visual-burn-rate emoji --cost-source cc --context-low-threshold 25 --context-medium-threshold 50",
+    "padding": 0
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {},
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "xhigh"
+    },
+    "claude-sonnet-5-5": {
+      "effortLevel": "xhigh"
+    },
+    "claude-fable-5-1": {
+      "effortLevel": "medium"
+    },
+    "claude-fable-5-2": {
+      "effortLevel": "medium"
+    }
+  },
+  "skipWorkflowUsageWarning": true,
+  "theme": "dark-ansi",
+  "preferredNotifChannel": "auto",
+  "switchModelsOnFlag": true,
+  "remoteControlAtStartup": false
+}
